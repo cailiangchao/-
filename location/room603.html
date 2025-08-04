@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>603室床位分布图</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 容器样式，与room602.html保持一致 */
+        .room-container {
+            width: 500px;
+            height: 400px;
+            background-color: white;
+            border: 2px solid #333;
+            position: relative;
+            margin: 20px auto;
+        }
+        
+        .room-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #333;
+        }
+        
+        /* 床位基础样式，与room602.html保持一致 */
+        .bed {
+            position: absolute;
+            border: 2px solid #333;
+            background-color: #fff;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            /* 默认床位尺寸，JS会根据旋转调整 */
+            width: 40px; 
+            height: 80px; 
+        }
+        
+        .bed:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .bed-label {
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+            padding: 2px;
+            background-color: #e0e0e0;
+        }
+        
+        .patient-area {
+            font-size: 8px;
+            text-align: center;
+            min-height: 12px;
+            background-color: #f8f8f8;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+        }
+        
+        /* 氧源接口样式，与room602.html保持一致 */
+        .oxygen-source {
+            position: absolute;
+            font-size: 14px;
+            color: #007acc;
+            font-weight: bold;
+            z-index: 10;
+        }
+        
+        /* 机械吊塔基础样式，与room602.html保持一致（具体尺寸和颜色由JS设置） */
+        .mechanical-tower {
+            position: absolute;
+            z-index: 5;
+        }
+        
+        /* 设施基础样式，与room602.html保持一致 */
+        .facility {
+            position: absolute;
+            font-size: 12px;
+        }
+        
+        /* 特定设施类型样式，与room602.html保持一致 */
+        .warehouse {
+            border: 2px solid #333;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .induction_door {
+            border: 2px solid #333;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #333;
+            width: 60px; /* 从room602.js中提取的固定尺寸 */
+            height: 40px; /* 从room602.js中提取的固定尺寸 */
+        }
+        
+        .washbasin {
+            border: 2px solid #333;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #333;
+            width: 50px; /* 从room602.js中提取的固定尺寸 */
+            height: 30px; /* 从room602.js中提取的固定尺寸 */
+        }
+
+        /* 为603室新增的“结构”设施样式 */
+        .structure {
+            border: 2px solid #ccc; /* 较浅的边框 */
+            background-color: #eee; /* 浅灰色背景 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: #555;
+            box-sizing: border-box; /* 包含边框和内边距在总宽度和高度内 */
+        }
+        
+        /* 图例和返回按钮样式，与room602.html保持一致 */
+        .legend {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .legend p {
+            margin: 5px 0;
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .back-button:hover {
+            background-color: #005a9e;
+        }
+        .room-nav {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .room-nav a {
+            display: block;
+            padding: 5px 10px;
+            color: #007acc;
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+        }
+        .room-nav a:last-child {
+            border-bottom: none;
+        }
+        .room-nav a:hover {
+            background-color: #f0f0f0;
+        }
+        .room-nav a.active {
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="room-nav">
+        <a href="index.html">返回首页</a>
+        <a href="room601.html">601室</a>
+        <a href="room602.html">602室</a>
+        <a href="room603.html" class="active">603室</a>
+        <a href="room605.html">605室</a>
+        <a href="room606.html">606室</a>
+        <a href="room607.html">607室</a>
+    </div>
+    
+    <div class="room-title">2025年__月__日603室床位分布图, 病人总数___人</div>
+    
+    <div class="room-container" id="room603-container">
+        <!-- 603室布局将通过JavaScript生成 -->
+    </div>
+    
+    <div class="signature-box">
+        <div class="signature-line">护士签名：________________</div>
+        <div class="signature-line">日期：____年__月__日</div>
+    </div>
+
+    <script src="room603.js"></script>
+    <script>
+        // 页面加载完成后渲染布局
+        document.addEventListener('DOMContentLoaded', function() {
+            renderRoom603();
+        });
+        
+        // 床位编辑模态框功能（简化版）
+        function openBedModal(bedId) {
+            alert(`点击了床位 ${bedId}，这里可以添加编辑功能`);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医院床位管理系统 - 主页面</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .room-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .room-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0066cc;
+        }
+        .room-status {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #0066cc;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>医院床位管理系统</h1>
+        <p>请选择要查看的房间</p>
+    </div>
+
+    <div class="room-grid">
+        <div class="room-card" onclick="location.href='room601.html'">
+            <div class="room-number">601室</div>
+            <div class="room-status">20张床位</div>
+        </div>
+        <div class="room-card" onclick="location.href='room602.html'">
+            <div class="room-number">602室</div>
+            <div class="room-status">18张床位</div>
+        </div>
+        <div class="room-card" onclick="location.href='room603.html'">
+            <div class="room-number">603室</div>
+            <div class="room-status">22张床位</div>
+        </div>
+        <div class="room-card" onclick="location.href='room605.html'">
+            <div class="room-number">605室</div>
+            <div class="room-status">未知床位数</div>
+        </div>
+        <div class="room-card" onclick="location.href='room606.html'">
+            <div class="room-number">606室</div>
+            <div class="room-status">未知床位数</div>
+        </div>
+        <div class="room-card" onclick="location.href='room607.html'">
+            <div class="room-number">607室</div>
+            <div class="room-status">未知床位数</div>
+        </div>
+        <!-- 可以添加更多房间 -->
+    </div>
+
+    <div class="footer">
+        <div class="instructions">
+            <p>系统版本: 1.0.0 | 最后更新: 2025-08-03</p>
+        </div>
+    </div>
+</body>
+</html>

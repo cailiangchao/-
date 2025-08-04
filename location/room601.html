@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>601室床位分布图</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .room-container {
+            width: 800px;
+            height: 400px;
+            background-color: white;
+            border: 2px solid #333;
+            position: relative;
+            margin: 20px auto;
+        }
+        
+
+        
+        .debug-control {
+            margin: 5px 0;
+        }
+        
+        .room-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #333;
+        }
+        
+        .bed {
+            position: absolute;
+            border: 2px solid #333;
+            background-color: #fff;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .bed:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .bed-label {
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+            padding: 2px;
+            background-color: #e0e0e0;
+        }
+        
+        .patient-area {
+            font-size: 8px;
+            text-align: center;
+            min-height: 12px;
+            background-color: #f8f8f8;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+        }
+        
+        .oxygen-source {
+            position: absolute;
+            font-size: 14px;
+            color: #007acc;
+            font-weight: bold;
+            z-index: 10;
+        }
+        
+        .mechanical-tower {
+            position: absolute;
+            z-index: 5;
+        }
+        
+        .facility {
+            position: absolute;
+            font-size: 12px;
+        }
+        
+        .warehouse {
+            border: 2px solid #333;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .induction_door {
+            border: 2px solid #333;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .washbasin {
+            border: 2px solid #333;
+            background-color: #ddf;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .cabinet {
+            border: 2px solid #666;
+            background-color: #eaeaea;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .legend {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .legend p {
+            margin: 5px 0;
+        }
+        
+        .room-nav {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .room-nav a {
+            display: block;
+            padding: 5px 10px;
+            color: #007acc;
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+        }
+        .room-nav a:last-child {
+            border-bottom: none;
+        }
+        .room-nav a:hover {
+            background-color: #f0f0f0;
+        }
+        .room-nav a.active {
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+
+        /* 床位状态样式 */
+        .bed.empty {
+            background-color: #e6f7ff;
+            border-color: #1890ff;
+        }
+
+        .bed.occupied {
+            background-color: #fff2e8;
+            border-color: #fa8c16;
+        }
+
+        .bed.discharge_planned {
+            background-color: #f6ffed;
+            border-color: #52c41a;
+        }
+    </style>
+</head>
+<body>
+    <div class="room-nav">
+        <a href="index.html">返回首页</a>
+        <a href="room601.html" class="active">601室</a>
+        <a href="room602.html">602室</a>
+        <a href="room603.html">603室</a>
+        <a href="room605.html">605室</a>
+        <a href="room606.html">606室</a>
+        <a href="room607.html">607室</a>
+    </div>
+    
+
+    
+    <div class="room-title">2025年__月__日601室床位分布图, 病人总数___人</div>
+    
+    <div class="room-container" id="room601-container">
+        <!-- 601室布局将通过JavaScript生成 -->
+    </div>
+    
+    <!-- 坐标指示容器 -->
+    <div id="coordinates-container"></div>
+    
+    <div class="legend">
+        <p><strong>图例说明：</strong></p>
+        <p>◉ 表示氧源接口</p>
+    </div>
+
+    <!-- 床位编辑模态框 -->
+    <div id="bed-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 100;">
+        <div class="modal-content" style="background-color: white; margin: 15% auto; padding: 20px; width: 300px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+            <h3>床位信息 - <span id="modal-bed-id"></span></h3>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="patient-name">患者床号:</label>
+                <input type="text" id="patient-name" placeholder="输入患者床号" style="width: 100%; padding: 10px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="bed-status">床位状态:</label>
+                <select id="bed-status" style="width: 100%; padding: 10px;">
+                    <option value="empty">空床</option>
+                    <option value="occupied">占用</option>
+                    <option value="discharge_planned">拟出院</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="bed-remarks">备注:</label>
+                <textarea id="bed-remarks" rows="3" style="width: 100%; padding: 5px;"></textarea>
+            </div>
+            <div class="modal-buttons" style="text-align: right;">
+                <button id="clear-btn" style="margin-right: 5px; padding: 5px 10px;">清空</button>
+                <button id="cancel-btn" style="margin-right: 5px; padding: 5px 10px;">取消</button>
+                <button id="confirm-btn" style="padding: 5px 10px; background-color: #007acc; color: white; border: none; border-radius: 3px;">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="room601.js"></script>
+    <script>
+        // 页面加载完成后渲染布局
+        document.addEventListener('DOMContentLoaded', function() {
+            renderRoom601();
+            
+            // 绑定模态框事件处理程序
+            document.getElementById('confirm-btn').addEventListener('click', saveBedData);
+            document.getElementById('cancel-btn').addEventListener('click', closeModal);
+            document.getElementById('clear-btn').addEventListener('click', clearBedData);
+            
+            // 将openBedModal函数暴露给全局
+            window.openExistingBedModal = openBedModal;
+            
+            // 初始化调试控件
+            initDebugControls();
+        });
+        
+        // 初始化调试控件功能
+        function initDebugControls() {
+            const container = document.getElementById('room601-container');
+            const toggleGrid = document.getElementById('toggle-grid');
+            const toggleCoordinates = document.getElementById('toggle-coordinates');
+            const toggleBoundaries = document.getElementById('toggle-boundaries');
+            
+            // 网格线控制
+            toggleGrid.addEventListener('change', function() {
+                if (this.checked) {
+                    container.classList.add('show-grid');
+                } else {
+                    container.classList.remove('show-grid');
+                }
+            });
+            
+            // 坐标显示控制
+            toggleCoordinates.addEventListener('change', function() {
+                const coordContainer = document.getElementById('coordinates-container');
+                if (this.checked) {
+            // 创建横向坐标标记（每50px一个）
+            for (let x = 0; x <= 1000; x += 50) {
+                        const marker = document.createElement('div');
+                        marker.className = 'coordinate-marker';
+                        marker.style.left = (container.offsetLeft + x) + 'px';
+                        marker.style.top = (container.offsetTop - 15) + 'px';
+                        marker.textContent = x;
+                        coordContainer.appendChild(marker);
+                        
+                        // 底部坐标
+                        const bottomMarker = document.createElement('div');
+                        bottomMarker.className = 'coordinate-marker';
+                        bottomMarker.style.left = (container.offsetLeft + x) + 'px';
+                        bottomMarker.style.top = (container.offsetTop + container.offsetHeight + 5) + 'px';
+                        bottomMarker.textContent = x;
+                        coordContainer.appendChild(bottomMarker);
+                    }
+                    
+                    // 创建纵向坐标标记（每50px一个）
+                    for (let y = 0; y <= 600; y += 50) {
+                        const marker = document.createElement('div');
+                        marker.className = 'coordinate-marker';
+                        marker.style.left = (container.offsetLeft - 20) + 'px';
+                        marker.style.top = (container.offsetTop + y) + 'px';
+                        marker.textContent = y;
+                        coordContainer.appendChild(marker);
+                        
+                        // 右侧坐标
+                        const rightMarker = document.createElement('div');
+                        rightMarker.className = 'coordinate-marker';
+                        rightMarker.style.left = (container.offsetLeft + container.offsetWidth + 5) + 'px';
+                        rightMarker.style.top = (container.offsetTop + y) + 'px';
+                        rightMarker.textContent = y;
+                        coordContainer.appendChild(rightMarker);
+                    }
+                } else {
+                    coordContainer.innerHTML = '';
+                }
+            });
+            
+            // 显示元素边界
+            toggleBoundaries.addEventListener('change', function() {
+                const showBoundaries = this.checked;
+                window.showElementBoundaries = showBoundaries;
+                renderRoom601(); // 重新渲染以应用边界样式
+            });
+        }
+        
+        // 打开床位编辑模态框
+        function openBedModal(bedId) {
+            const modal = document.getElementById('bed-modal');
+            document.getElementById('modal-bed-id').textContent = bedId;
+            
+            // 填充现有数据
+            const bed = room601BedData[bedId] || { patientName: '', status: 'empty', remarks: '' };
+            document.getElementById('patient-name').value = bed.patientName || '';
+            document.getElementById('bed-status').value = bed.status || 'empty';
+            document.getElementById('bed-remarks').value = bed.remarks || '';
+            
+            modal.style.display = 'block';
+        }
+        
+        // 保存床位数据
+        function saveBedData() {
+            const bedId = document.getElementById('modal-bed-id').textContent;
+            room601BedData[bedId] = {
+                patientName: document.getElementById('patient-name').value,
+                status: document.getElementById('bed-status').value,
+                remarks: document.getElementById('bed-remarks').value
+            };
+            
+            // 保存数据到本地存储
+            localStorage.setItem('room601BedData', JSON.stringify(room601BedData));
+            
+            closeModal();
+            renderRoom601(); // 重新渲染以更新显示
+        }
+        
+        // 清空床位数据
+        function clearBedData() {
+            const bedId = document.getElementById('modal-bed-id').textContent;
+            room601BedData[bedId] = {
+                patientName: '',
+                status: 'empty',
+                remarks: ''
+            };
+            
+            // 保存数据到本地存储
+            localStorage.setItem('room601BedData', JSON.stringify(room601BedData));
+            
+            closeModal();
+            renderRoom601(); // 重新渲染以更新显示
+        }
+        
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('bed-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

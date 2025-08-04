@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>606室床位分布图</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 容器样式，更新为1000px宽，500px高 */
+        .room-container {
+            width: 1000px; /* 更新宽度 */
+            height: 500px;  /* 更新高度 */
+            background-color: white;
+            border: 2px solid #333;
+            position: relative;
+            margin: 20px auto;
+            overflow: hidden; /* 防止元素溢出容器 */
+        }
+        
+        .room-title {
+            text-align: center;
+            font-size: 24px; /* 标题字体稍大 */
+            font-weight: bold;
+            margin: 15px 0;
+            color: #333;
+        }
+        
+        /* 床位基础样式，尺寸稍作调整以适应新的画布大小 */
+        .bed {
+            position: absolute;
+            border: 1px solid #333; /* 边框稍细以适应小尺寸 */
+            background-color: #fff;
+            border-radius: 4px; /* 稍大的圆角 */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            /* 默认床位尺寸将在JS中根据新比例计算并设置 */
+            /* 预设一个基准，JS会动态设置 */
+            width: 35px; /* 调整为更接近图片中床位的实际尺寸（缩放后） */
+            height: 70px; /* 调整为更接近图片中床位的实际尺寸（缩放后） */
+            box-sizing: border-box; /* 边框和内边距包含在尺寸内 */
+        }
+        
+        .bed:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .bed-label {
+            font-size: 10px; /* 调整字体大小 */
+            font-weight: bold;
+            text-align: center;
+            padding: 2px; /* 调整内边距 */
+            background-color: #e0e0e0;
+        }
+        
+        .patient-area {
+            font-size: 8px; /* 调整字体大小 */
+            text-align: center;
+            min-height: 15px; /* 调整最小高度 */
+            background-color: #f8f8f8;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px; /* 调整内边距 */
+            word-break: break-all; /* 防止长文本溢出 */
+            overflow: hidden;
+            text-overflow: ellipsis; /* 超出显示省略号 */
+        }
+
+        /* 氧源接口样式，调整大小 */
+        .oxygen-source {
+            position: absolute;
+            font-size: 16px; /* 调整大小 */
+            color: #ff0000; /* 红色圆点 */
+            font-weight: bold;
+            z-index: 10;
+        }
+        
+        /* 机械吊塔基础样式，调整大小和字体 */
+        .mechanical-tower {
+            position: absolute;
+            z-index: 5;
+            background-color: #666;
+            color: white;
+            font-size: 10px; /* 调整字体大小 */
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #333;
+            box-sizing: border-box;
+            width: 40px; /* 调整为适应图片中的尺寸 */
+            height: 20px; /* 调整为适应图片中的尺寸 */
+        }
+        
+        /* 设施基础样式 */
+        .facility {
+            position: absolute;
+            font-size: 12px; /* 调整默认字体大小 */
+            box-sizing: border-box;
+            color: #333;
+        }
+        
+        /* 特定设施类型样式 */
+        .storage-cabinet, .water-tank, .cabinet {
+            border: 2px solid #333;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px; /* 字体稍大 */
+            font-weight: bold;
+            word-break: break-all;
+            text-align: center;
+        }
+
+        .wall {
+            border: 1px solid #333;
+            background-color: #ccc;
+        }
+
+        .equipment-belt {
+            border: 1px dashed #666; /* 虚线表示设备带 */
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px; /* 字体稍大 */
+            text-align: center;
+            word-break: break-all;
+        }
+
+        .computer {
+            font-size: 12px; /* 字体稍大 */
+            font-weight: bold;
+            color: #000;
+            background-color: #fff;
+            border: 1px solid #333;
+            padding: 3px;
+            text-align: center;
+        }
+
+        .treatment-room {
+            border: 2px solid #333;
+            background-color: #f0f8ff; /* 浅蓝色背景 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px; /* 字体稍大 */
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .door {
+            border: 2px solid #333;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px; /* 字体稍大 */
+            font-weight: bold;
+            color: #333;
+        }
+        
+        /* 新增的区域和信息框样式 */
+        .infection-zone {
+            border: 2px solid #cc6600; /* 感染病区橙色边框 */
+            background-color: #ffe0b3; /* 浅橙色背景 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px; /* 字体稍大 */
+            font-weight: bold;
+            color: #cc6600;
+            text-align: center;
+        }
+
+        .remark-box {
+            border: 2px solid #007acc; /* 蓝色边框 */
+            background-color: #e0f2ff; /* 浅蓝色背景 */
+            padding: 8px; /* 内边距稍大 */
+            font-size: 12px; /* 字体稍大 */
+            color: #007acc;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .area-label {
+            background-color: #90ee90; /* 浅绿色背景 */
+            border: 1px solid #3cb371;
+            padding: 4px 8px; /* 内边距稍大 */
+            font-size: 14px; /* 字体稍大 */
+            font-weight: bold;
+            color: #3cb371;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .corridor {
+            background-color: #f0f0f0;
+            font-size: 16px; /* 字体稍大 */
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .treatment-car {
+            border: 1px solid #333;
+            background-color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px; /* 字体稍大 */
+            text-align: center;
+            padding: 4px;
+            word-break: break-all;
+        }
+        
+        /* 图例和返回按钮样式，与room602.html保持一致 */
+        .legend {
+            margin-top: 25px; /* 调整间距 */
+            text-align: center;
+            font-size: 14px; /* 字体稍大 */
+        }
+        
+        .legend p {
+            margin: 6px 0;
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 25px; /* 调整位置 */
+            left: 25px; /* 调整位置 */
+            padding: 12px 25px; /* 调整大小 */
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px; /* 字体稍大 */
+            z-index: 100;
+        }
+        
+        .back-button:hover {
+            background-color: #005a9e;
+        }
+
+        /* 底部附加信息样式 */
+        .additional-info {
+            text-align: center;
+            margin-top: 25px; /* 调整间距 */
+            font-size: 14px; /* 字体稍大 */
+            color: #555;
+        }
+
+        .signature-line {
+            margin-top: 12px; /* 调整间距 */
+            font-size: 14px; /* 字体稍大 */
+            font-weight: bold;
+            text-align: center;
+        }
+        .room-nav {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .room-nav a {
+            display: block;
+            padding: 5px 10px;
+            color: #007acc;
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+        }
+        .room-nav a:last-child {
+            border-bottom: none;
+        }
+        .room-nav a:hover {
+            background-color: #f0f0f0;
+        }
+        .room-nav a.active {
+            font-weight: bold;
+            background-color: #e6f7ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="room-nav">
+        <a href="index.html">返回首页</a>
+        <a href="room601.html">601室</a>
+        <a href="room602.html">602室</a>
+        <a href="room603.html">603室</a>
+        <a href="room605.html">605室</a>
+        <a href="room606.html" class="active">606室</a>
+        <a href="room607.html">607室</a>
+    </div>
+    
+    <div class="room-title">2025年__月__日606室床位分布图, 病人总数___人</div>
+    
+    <div class="room-container" id="room606-container">
+        <!-- 606室布局将通过JavaScript生成 -->
+    </div>
+    
+    <div class="signature-box">
+        <div class="signature-line">护士签名：________________</div>
+        <div class="signature-line">日期：____年__月__日</div>
+    </div>
+
+    <script src="room606.js"></script>
+    <script>
+        // 页面加载完成后渲染布局
+        document.addEventListener('DOMContentLoaded', function() {
+            renderRoom606();
+        });
+        
+        // 床位编辑模态框功能（简化版）
+        function openBedModal(bedId) {
+            alert(`点击了床位 ${bedId}，这里可以添加编辑功能`);
+        }
+    </script>
+</body>
+</html>
