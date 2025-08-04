@@ -32,129 +32,123 @@ const room606Config = {
     canvasSize: { width: CANVAS_WIDTH, height: CANVAS_HEIGHT },
     beds: [
         // 第一排床位 (Y约-60)
-        { id: "606-42", position: { x: mapX(65), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-41", position: { x: mapX(125), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-40", position: { x: mapX(185), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-39", position: { x: mapX(245), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-38", position: { x: mapX(305), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-37", position: { x: mapX(365), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-36", position: { x: mapX(425), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-35", position: { x: mapX(485), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-33", position: { x: mapX(545), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-32", position: { x: mapX(650), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-31", position: { x: mapX(710), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-30", position: { x: mapX(770), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-29", position: { x: mapX(830), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-28", position: { x: mapX(890), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-27", position: { x: mapX(950), y: mapY(-60) }, rotation: 0, hasOxygen: true },
-        { id: "606-26", position: { x: mapX(1010), y: mapY(-60) }, rotation: 0, hasOxygen: true },
+        { id: "606-42", position: { x: mapX(65), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-41", position: { x: mapX(125), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-40", position: { x: mapX(185), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-39", position: { x: mapX(245), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-38", position: { x: mapX(305), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-37", position: { x: mapX(365), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-36", position: { x: mapX(425), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-35", position: { x: mapX(485), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-33", position: { x: mapX(545), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-32", position: { x: mapX(650), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-31", position: { x: mapX(710), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-30", position: { x: mapX(770), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-29", position: { x: mapX(830), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-28", position: { x: mapX(890), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-27", position: { x: mapX(950), y: mapY(-0) }, rotation: 0, hasOxygen: true },
+        { id: "606-26", position: { x: mapX(1010), y: mapY(-0) }, rotation: 0, hasOxygen: true },
 
         // 第二排床位 (Y约-250)
-        { id: "606-25", position: { x: mapX(70), y: mapY(-250) }, rotation: 0, hasOxygen: true },
-        { id: "606-23", position: { x: mapX(170), y: mapY(-250) }, rotation: 0, hasOxygen: true },
-        { id: "606-22", position: { x: mapX(250), y: mapY(-250) }, rotation: 0, hasOxygen: true },
-        { id: "606-21", position: { x: mapX(300), y: mapY(-250) }, rotation: 0, hasOxygen: true },
-        { id: "606-20", position: { x: mapX(360), y: mapY(-250) }, rotation: 0, hasOxygen: true },
-        { id: "606-19", position: { x: mapX(440), y: mapY(-250) }, rotation: 0, hasOxygen: true },
-        { id: "606-18", position: { x: mapX(500), y: mapY(-250) }, rotation: 0, hasOxygen: true },
-        { id: "606-09", position: { x: mapX(650), y: mapY(-250) }, rotation: 0, hasOxygen: true },
-        { id: "606-08", position: { x: mapX(710), y: mapY(-250) }, rotation: 0, hasOxygen: true },
-        { id: "606-07", position: { x: mapX(770), y: mapY(-250) }, rotation: 0, hasOxygen: true },
-        { id: "606-06", position: { x: mapX(830), y: mapY(-250) }, rotation: 0, hasOxygen: true },
-        { id: "606-05", position: { x: mapX(890), y: mapY(-250) }, rotation: 0, hasOxygen: true },
-        { id: "606-03", position: { x: mapX(950), y: mapY(-250) }, rotation: 0, hasOxygen: true },
+        { id: "606-25", position: { x: mapX(70), y: mapY(-190) }, rotation: 0, hasOxygen: true },
+        { id: "606-23", position: { x: mapX(130), y: mapY(-190) }, rotation: 0, hasOxygen: true },
+        { id: "606-22", position: { x: mapX(210), y: mapY(-190) }, rotation: 0, hasOxygen: true },
+        { id: "606-21", position: { x: mapX(300), y: mapY(-190) }, rotation: 0, hasOxygen: true },
+        { id: "606-20", position: { x: mapX(360), y: mapY(-190) }, rotation: 0, hasOxygen: true },
+        { id: "606-19", position: { x: mapX(440), y: mapY(-190) }, rotation: 0, hasOxygen: true },
+        { id: "606-18", position: { x: mapX(500), y: mapY(-190) }, rotation: 0, hasOxygen: true },
+        { id: "606-09", position: { x: mapX(650), y: mapY(-190) }, rotation: 0, hasOxygen: true },
+        { id: "606-08", position: { x: mapX(710), y: mapY(-190) }, rotation: 0, hasOxygen: true },
+        { id: "606-07", position: { x: mapX(770), y: mapY(-190) }, rotation: 0, hasOxygen: true },
+        { id: "606-06", position: { x: mapX(830), y: mapY(-190) }, rotation: 0, hasOxygen: true },
+        { id: "606-05", position: { x: mapX(950), y: mapY(-190) }, rotation: 0, hasOxygen: true },
+        { id: "606-03", position: { x: mapX(1030), y: mapY(-190) }, rotation: 0, hasOxygen: true },
 
-        // 第三排床位 (Y约-350/-400)
-        { id: "606-45", position: { x: mapX(170), y: mapY(-350) }, rotation: 0, hasOxygen: true },
-        { id: "606-43", position: { x: mapX(250), y: mapY(-350) }, rotation: 0, hasOxygen: true }, // Horizontal in image, but label is vertical
-        { id: "606-10", position: { x: mapX(650), y: mapY(-350) }, rotation: 0, hasOxygen: true },
-        { id: "606-11", position: { x: mapX(710), y: mapY(-350) }, rotation: 0, hasOxygen: true },
-        { id: "606-01", position: { x: mapX(830), y: mapY(-350) }, rotation: 0, hasOxygen: true },
-        { id: "606-02", position: { x: mapX(950), y: mapY(-350) }, rotation: 0, hasOxygen: true },
+        
+        { id: "606-45", position: { x: mapX(130), y: mapY(-290) }, rotation: 0, hasOxygen: true },
+        { id: "606-43", position: { x: mapX(210), y: mapY(-272) }, rotation: 90, hasOxygen: true }, // Horizontal in image, but label is vertical
+        { id: "606-10", position: { x: mapX(650), y: mapY(-290) }, rotation: 0, hasOxygen: true },
+        { id: "606-11", position: { x: mapX(710), y: mapY(-290) }, rotation: 0, hasOxygen: true },
+        { id: "606-17", position: { x: mapX(470), y: mapY(-270) }, rotation: 90, hasOxygen: true },
+        { id: "606-01", position: { x: mapX(840), y: mapY(-290) }, rotation: 0, hasOxygen: true },
+        { id: "606-02", position: { x: mapX(1000), y: mapY(-290) }, rotation: 0, hasOxygen: true },
 
         // 第四排床位 (Y约-490)
-        { id: "606-47", position: { x: mapX(170), y: mapY(-490) }, rotation: 0, hasOxygen: false },
-        { id: "606-46", position: { x: mapX(250), y: mapY(-490) }, rotation: 0, hasOxygen: false },
-        { id: "606-16", position: { x: mapX(440), y: mapY(-490) }, rotation: 0, hasOxygen: false },
-        { id: "606-15", position: { x: mapX(500), y: mapY(-490) }, rotation: 0, hasOxygen: false }
+        { id: "606-47", position: { x: mapX(150), y: mapY(-490) }, rotation: 90, hasOxygen: false },
+        { id: "606-46", position: { x: mapX(230), y: mapY(-490) }, rotation: 0, hasOxygen: false },
+        { id: "606-16", position: { x: mapX(420), y: mapY(-490) }, rotation: 0, hasOxygen: false },
+        { id: "606-15", position: { x: mapX(500), y: mapY(-490) }, rotation: 0, hasOxygen: false },
+        { id: "606-13", position: { x: mapX(610), y: mapY(-490) }, rotation: 90, hasOxygen: false },
+        { id: "加床1", position: { x: mapX(310), y: mapY(-490) }, rotation: 0, hasOxygen: false },
+        { id: "加床4", position: { x: mapX(360), y: mapY(-490) }, rotation: 0, hasOxygen: false },
+        { id: "加床2", position: { x: mapX(300), y: mapY(-290) }, rotation: 0, hasOxygen: false },
+        { id: "加床3", position: { x: mapX(360), y: mapY(-290) }, rotation: 0, hasOxygen: false },
+        { id: "606-12", position: { x: mapX(700), y: mapY(-490) }, rotation: 90, hasOxygen: false }
     ],
     facilities: [
         // 左侧设施
         { type: "storage-cabinet", label: "储物柜", position: { x: mapX(0), y: mapY(-200) }, width: mapX(70), height: mapY(100) - mapY(200) },
-        { type: "water-tank", label: "水箱", position: { x: mapX(0), y: mapY(-370) }, width: mapX(70), height: mapY(100) - mapY(170) },
+        
         { type: "facility", label: "脑电监护护仪", position: { x: mapX(0), y: mapY(-70) }, width: mapX(60), height: mapY(50)-mapY(70) },
         
         // 中间区域设施
-        { type: "wall", label: "墙体", position: { x: mapX(70), y: mapY(-320) }, width: mapX(100), height: mapY(50)-mapY(70) },
-        { type: "equipment-belt", label: "设备带", position: { x: mapX(130), y: mapY(-290) }, width: mapX(140), height: mapY(10) },
-        { type: "computer", label: "电脑", position: { x: mapX(400), y: mapY(-280) }, width: mapX(40), height: mapY(20)-mapY(0) },
-        { type: "treatment-room", label: "保温设备消\n毒处置间", position: { x: mapX(350), y: mapY(-350) }, width: mapX(150), height: mapY(100) }, // Estimated size
-        { type: "wall", label: "墙体", position: { x: mapX(350), y: mapY(-320) }, width: mapX(100), height: mapY(20)-mapY(0) },
-        { type: "equipment-belt", label: "设备带", position: { x: mapX(630), y: mapY(-290) }, width: mapX(140), height: mapY(10) },
-        { type: "wall", label: "墙体", position: { x: mapX(750), y: mapY(-320) }, width: mapX(100), height: mapY(20)-mapY(0) },
-        { type: "equipment-belt", label: "设备带", position: { x: mapX(870), y: mapY(-290) }, width: mapX(140), height: mapY(10) },
-        { type: "treatment-car", label: "治疗车", position: { x: mapX(580), y: mapY(-60) }, width: mapX(40), height: mapY(20)-mapY(0) },
-        { type: "treatment-car", label: "治疗车", position: { x: mapX(1040), y: mapY(-60) }, width: mapX(40), height: mapY(20)-mapY(0) },
+        { type: "wall", label: "墙体", position: { x: mapX(0), y: mapY(-290) }, width: mapX(130), height: mapY(50)-mapY(370) },
+        { type: "equipment-belt", label: "设备带", position: { x: mapX(130), y: mapY(-270) }, width: mapX(130), height: mapY(10) },
+        { type: "equipment-belt", label: "设备带", position: { x: mapX(300), y: mapY(-270) }, width: mapX(240), height: mapY(10) },
+        { type: "computer", label: "电脑", position: { x: mapX(400), y: mapY(-240) }, width: mapX(40), height: mapY(20)-mapY(0) },
+        { type: "wall", label: "墙体", position: { x: mapX(400), y: mapY(-290) }, width: mapX(40), height: mapY(20)-mapY(370) },
+        { type: "equipment-belt", label: "设备带", position: { x: mapX(630), y: mapY(-270) }, width: mapX(240), height: mapY(10) },
+        { type: "wall", label: "墙体", position: { x: mapX(760), y: mapY(-300) }, width: mapX(70), height: mapY(20)-mapY(370) },
+        { type: "equipment-belt", label: "设备带", position: { x: mapX(950), y: mapY(-270) }, width: mapX(140), height: mapY(10) },
+        { type: "treatment-car", label: "治疗车", position: { x: mapX(585), y: mapY(-0) }, width: mapX(40), height: mapY(20)-mapY(0) },
+        { type: "treatment-car", label: "治疗车", position: { x: mapX(1050), y: mapY(-0) }, width: mapX(20), height: mapY(40)-mapY(0) },
         
         // 顶部设施
-        { type: "door", label: "门", position: { x: mapX(270), y: mapY(-500) }, width: mapX(40), height: mapY(30)-mapY(0) },
-        { type: "door", label: "门", position: { x: mapX(800), y: mapY(-500) }, width: mapX(40), height: mapY(30)-mapY(0) },
-        { type: "cabinet", label: "柜子", position: { x: mapX(750), y: mapY(-490) }, width: mapX(40), height: mapY(60)-mapY(0) },
-        { type: "cabinet", label: "柜子", position: { x: mapX(870), y: mapY(-490) }, width: mapX(40), height: mapY(60)-mapY(0) },
-        { type: "cabinet", label: "柜子", position: { x: mapX(1010), y: mapY(-490) }, width: mapX(40), height: mapY(60)-mapY(0) },
-        { type: "corridor", label: "走廊", position: { x: mapX(850), y: mapY(-520) }, width: mapX(200), height: mapY(30) },
+        { type: "door", label: "门", position: { x: mapX(280), y: mapY(-530) }, width: mapX(40), height: mapY(30)-mapY(0) },
+        { type: "door", label: "门", position: { x: mapX(900), y: mapY(-530) }, width: mapX(40), height: mapY(30)-mapY(0) },
+        { type: "cabinet", label: "柜子", position: { x: mapX(830), y: mapY(-530) }, width: mapX(70), height: mapY(60)-mapY(0) },
+        { type: "cabinet", label: "柜子", position: { x: mapX(980), y: mapY(-530) }, width: mapX(70), height: mapY(60)-mapY(0) },
+        { type: "cabinet", label: "柜子", position: { x: mapX(1040), y: mapY(-300) }, width: mapX(40), height: mapY(60)-mapY(270) },
         
         // 区域标注
-        { type: "infection-zone", label: "感染病区 (7张)", position: { x: mapX(150), y: mapY(-160) }, width: mapX(150), height: mapY(50)-mapY(0) },
-        { type: "area-label", label: "C区", position: { x: mapX(280), y: mapY(-160) }, width: mapX(50), height: mapY(50)-mapY(0) },
-        { type: "area-label", label: "B区", position: { x: mapX(600), y: mapY(-160) }, width: mapX(50), height: mapY(50)-mapY(0) },
-        { type: "area-label", label: "A区", position: { x: mapX(860), y: mapY(-270) }, width: mapX(50), height: mapY(50)-mapY(0) },
-        { type: "infection-zone", label: "感染病区4", position: { x: mapX(350), y: mapY(-400) }, width: mapX(150), height: mapY(50)-mapY(0) },
+        { type: "infection-zone", label: "感染病区 (7张)", position: { x: mapX(50), y: mapY(-100) }, width: mapX(150), height: mapY(50)-mapY(0) },
+        { type: "area-label", label: "C区", position: { x: mapX(280), y: mapY(-140) }, width: mapX(50), height: mapY(50)-mapY(0) },
+        { type: "area-label", label: "B区", position: { x: mapX(600), y: mapY(-140) }, width: mapX(50), height: mapY(50)-mapY(0) },
+        { type: "area-label", label: "A区", position: { x: mapX(880), y: mapY(-270) }, width: mapX(50), height: mapY(50)-mapY(0) },
+        { type: "infection-zone", label: "感染病区4", position: { x: mapX(180), y: mapY(-450) }, width: mapX(150), height: mapY(50)-mapY(0) },
         { type: "area-label", label: "C区", position: { x: mapX(280), y: mapY(-380) }, width: mapX(50), height: mapY(50)-mapY(0) },
-        { type: "remark-box", label: "病情稍重病人 (需要用氧病人) 靠窗放置", position: { x: mapX(780), y: mapY(-170) }, width: mapX(200), height: mapY(70)-mapY(0) }
+        { type: "remark-box", label: "病情稍重病人 (需要用氧病人) 靠窗放置", position: { x: mapX(850), y: mapY(-110) }, width: mapX(200), height: mapY(70)-mapY(0) }
     ],
     // 氧源接口位置 (●)
     oxygenSources: [
         // Y约-100
-        { position: { x: mapX(100), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(160), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(220), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(340), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(400), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(460), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(520), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(680), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(740), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(800), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(920), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(980), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(1040), y: mapY(-100) }, symbol: "●" },
-
-        // Y约-280
+        { position: { x: mapX(100), y: mapY(0) }, symbol: "●" },
+        { position: { x: mapX(160), y: mapY(0) }, symbol: "●" },
+        { position: { x: mapX(220), y: mapY(0) }, symbol: "●" },
+        { position: { x: mapX(340), y: mapY(0) }, symbol: "●" },
+        { position: { x: mapX(400), y: mapY(0) }, symbol: "●" },
+        { position: { x: mapX(460), y: mapY(0) }, symbol: "●" },
+        { position: { x: mapX(520), y: mapY(0) }, symbol: "●" },
+        { position: { x: mapX(680), y: mapY(0) }, symbol: "●" },
+        { position: { x: mapX(740), y: mapY(0) }, symbol: "●" },
+        { position: { x: mapX(800), y: mapY(0) }, symbol: "●" },
+        { position: { x: mapX(920), y: mapY(0) }, symbol: "●" },
+        { position: { x: mapX(980), y: mapY(0) }, symbol: "●" },
+        { position: { x: mapX(1040), y: mapY(0) }, symbol: "●" },
         { position: { x: mapX(200), y: mapY(-280) }, symbol: "●" },
-        { position: { x: mapX(280), y: mapY(-280) }, symbol: "●" },
-        { position: { x: mapX(460), y: mapY(-280) }, symbol: "●" },
-        { position: { x: mapX(520), y: mapY(-280) }, symbol: "●" },
-        { position: { x: mapX(740), y: mapY(-280) }, symbol: "●" },
-        { position: { x: mapX(800), y: mapY(-280) }, symbol: "●" },
-        { position: { x: mapX(920), y: mapY(-280) }, symbol: "●" },
-        { position: { x: mapX(980), y: mapY(-280) }, symbol: "●" },
-
-        // Y约-320
-        { position: { x: mapX(340), y: mapY(-320) }, symbol: "●" },
-        { position: { x: mapX(620), y: mapY(-320) }, symbol: "●" },
-        { position: { x: mapX(860), y: mapY(-320) }, symbol: "●" },
-
-        // Y约-370
-        { position: { x: mapX(200), y: mapY(-370) }, symbol: "●" },
-        { position: { x: mapX(740), y: mapY(-370) }, symbol: "●" },
-        { position: { x: mapX(800), y: mapY(-370) }, symbol: "●" },
-        { position: { x: mapX(920), y: mapY(-370) }, symbol: "●" },
-        { position: { x: mapX(980), y: mapY(-370) }, symbol: "●" },
-
-        // Y约-480
-        { position: { x: mapX(420), y: mapY(-480) }, symbol: "●" },
-        { position: { x: mapX(580), y: mapY(-480) }, symbol: "●" }
+        { position: { x: mapX(515), y: mapY(-280) }, symbol: "●" },
+        { position: { x: mapX(460), y: mapY(-250) }, symbol: "●" },
+        { position: { x: mapX(740), y: mapY(-250) }, symbol: "●" },
+        { position: { x: mapX(800), y: mapY(-250) }, symbol: "●" },
+        { position: { x: mapX(950), y: mapY(-250) }, symbol: "●" },
+        { position: { x: mapX(1000), y: mapY(-280) }, symbol: "●" },
+        { position: { x: mapX(300), y: mapY(-250) }, symbol: "●" },
+        { position: { x: mapX(680), y: mapY(-280) }, symbol: "●" },
+        { position: { x: mapX(840), y: mapY(-280) }, symbol: "●" },
+        { position: { x: mapX(140), y: mapY(-250) }, symbol: "●" },
+        { position: { x: mapX(640), y: mapY(-250) }, symbol: "●" },
+        { position: { x: mapX(440), y: mapY(-530) }, symbol: "●" },
+        { position: { x: mapX(640), y: mapY(-530) }, symbol: "●" }
     ],
     // 机械吊塔位置
     mechanicalTowers: []
@@ -255,6 +249,103 @@ function renderRoom606() {
         
         container.appendChild(bedEl);
     });
+}
+
+// 创建床位编辑模态框
+function createBedModal() {
+    const modal = document.createElement('div');
+    modal.id = 'bed-modal';
+    modal.className = 'modal';
+    
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>床位信息 - <span id="modal-bed-id"></span></h3>
+            <div class="form-group">
+                <label for="patient-name">患者床号:</label>
+                <input type="text" id="patient-name" placeholder="输入患者床号">
+            </div>
+            <div class="form-group">
+                <label for="bed-status">床位状态:</label>
+                <select id="bed-status">
+                    <option value="empty">空床</option>
+                    <option value="occupied">占用</option>
+                    <option value="discharge_planned">拟出院</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bed-remarks">备注:</label>
+                <textarea id="bed-remarks" rows="3"></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button id="clear-btn">清空</button>
+                <button id="cancel-btn">取消</button>
+                <button id="confirm-btn">确认</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    return modal;
+}
+
+// 床位编辑模态框功能
+function openBedModal(bedId) {
+    let modal = document.getElementById('bed-modal');
+    if (!modal) {
+        modal = createBedModal();
+    }
+    
+    document.getElementById('modal-bed-id').textContent = bedId;
+    
+    // 填充现有数据
+    const bed = room606BedData[bedId] || { patientName: '', status: 'empty', remarks: '' };
+    document.getElementById('patient-name').value = bed.patientName || '';
+    document.getElementById('bed-status').value = bed.status || 'empty';
+    document.getElementById('bed-remarks').value = bed.remarks || '';
+    
+    modal.style.display = 'block';
+    
+    // 绑定按钮事件
+    document.getElementById('confirm-btn').onclick = saveBedData;
+    document.getElementById('cancel-btn').onclick = closeModal;
+    document.getElementById('clear-btn').onclick = clearBedData;
+}
+
+// 保存床位数据
+function saveBedData() {
+    const bedId = document.getElementById('modal-bed-id').textContent;
+    room606BedData[bedId] = {
+        patientName: document.getElementById('patient-name').value,
+        status: document.getElementById('bed-status').value,
+        remarks: document.getElementById('bed-remarks').value
+    };
+    
+    // 保存数据到本地存储
+    localStorage.setItem('room606BedData', JSON.stringify(room606BedData));
+    
+    closeModal();
+    renderRoom606(); // 重新渲染以更新显示
+}
+
+// 关闭模态框
+function closeModal() {
+    document.getElementById('bed-modal').style.display = 'none';
+}
+
+// 清空床位数据
+function clearBedData() {
+    const bedId = document.getElementById('modal-bed-id').textContent;
+    room606BedData[bedId] = {
+        patientName: '',
+        status: 'empty',
+        remarks: ''
+    };
+    
+    // 保存数据到本地存储
+    localStorage.setItem('room606BedData', JSON.stringify(room606BedData));
+    
+    closeModal();
+    renderRoom606(); // 重新渲染以更新显示
 }
 
 // 初始化床位数据

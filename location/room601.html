@@ -195,7 +195,33 @@
     
 
     
-    <div class="room-title">2025年__月__日601室床位分布图, 病人总数___人</div>
+    <div class="room-title">
+        <span id="current-date"></span>601室床位分布图, 
+        病人总数<input type="number" id="patient-count" min="0" style="width:40px">人,
+        预出院<input type="number" id="discharge-count" min="0" style="width:40px">人
+    </div>
+    <script>
+        // Set current date
+        const now = new Date();
+        document.getElementById('current-date').textContent = 
+            `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+        
+        // Load saved counts
+        const counts = JSON.parse(localStorage.getItem('roomCounts') || '{}');
+        document.getElementById('patient-count').value = counts.patientCount || '';
+        document.getElementById('discharge-count').value = counts.dischargeCount || '';
+        
+        // Save counts when changed
+        ['patient-count', 'discharge-count'].forEach(id => {
+            document.getElementById(id).addEventListener('change', function() {
+                const counts = {
+                    patientCount: document.getElementById('patient-count').value,
+                    dischargeCount: document.getElementById('discharge-count').value
+                };
+                localStorage.setItem('roomCounts', JSON.stringify(counts));
+            });
+        });
+    </script>
     
     <div class="room-container" id="room601-container">
         <!-- 601室布局将通过JavaScript生成 -->
@@ -204,38 +230,9 @@
     <!-- 坐标指示容器 -->
     <div id="coordinates-container"></div>
     
-    <div class="legend">
-        <p><strong>图例说明：</strong></p>
-        <p>◉ 表示氧源接口</p>
-    </div>
+>
 
-    <!-- 床位编辑模态框 -->
-    <div id="bed-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 100;">
-        <div class="modal-content" style="background-color: white; margin: 15% auto; padding: 20px; width: 300px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-            <h3>床位信息 - <span id="modal-bed-id"></span></h3>
-            <div class="form-group" style="margin-bottom: 10px;">
-                <label for="patient-name">患者床号:</label>
-                <input type="text" id="patient-name" placeholder="输入患者床号" style="width: 100%; padding: 10px;">
-            </div>
-            <div class="form-group" style="margin-bottom: 10px;">
-                <label for="bed-status">床位状态:</label>
-                <select id="bed-status" style="width: 100%; padding: 10px;">
-                    <option value="empty">空床</option>
-                    <option value="occupied">占用</option>
-                    <option value="discharge_planned">拟出院</option>
-                </select>
-            </div>
-            <div class="form-group" style="margin-bottom: 10px;">
-                <label for="bed-remarks">备注:</label>
-                <textarea id="bed-remarks" rows="3" style="width: 100%; padding: 5px;"></textarea>
-            </div>
-            <div class="modal-buttons" style="text-align: right;">
-                <button id="clear-btn" style="margin-right: 5px; padding: 5px 10px;">清空</button>
-                <button id="cancel-btn" style="margin-right: 5px; padding: 5px 10px;">取消</button>
-                <button id="confirm-btn" style="padding: 5px 10px; background-color: #007acc; color: white; border: none; border-radius: 3px;">确认</button>
-            </div>
-        </div>
-    </div>
+
 
     <script src="room601.js"></script>
     <script>
@@ -374,5 +371,58 @@
             document.getElementById('bed-modal').style.display = 'none';
         }
     </script>
+    <div class="signature-box" style="text-align: center; margin: 20px 0;">
+        <div style="margin-bottom: 10px;">
+            护士签名: <input type="text" id="nurse-signature" style="width: 200px; text-align: center;">
+        </div>
+        <div>
+            日期: <input type="date" id="signature-date" style="width: 150px; text-align: center;">
+        </div>
+    </div>
+    <script>
+        // Load saved signature
+        const signatureData = JSON.parse(localStorage.getItem('signatureData') || '{}');
+        document.getElementById('nurse-signature').value = signatureData.nurseName || '';
+        document.getElementById('signature-date').value = signatureData.signatureDate || '';
+        
+        // Save signature when changed
+        ['nurse-signature', 'signature-date'].forEach(id => {
+            document.getElementById(id).addEventListener('change', function() {
+                const signatureData = {
+                    nurseName: document.getElementById('nurse-signature').value,
+                    signatureDate: document.getElementById('signature-date').value
+                };
+                localStorage.setItem('signatureData', JSON.stringify(signatureData));
+            });
+        });
+    </script>
+
+    <!-- 床位编辑模态框 -->
+<div id="bed-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 100;">
+<div class="modal-content" style="background-color: white; margin: 15% auto; padding: 20px; width: 300px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+<h3>床位信息 - <span id="modal-bed-id"></span></h3>
+<div class="form-group" style="margin-bottom: 10px;">
+<label for="patient-name">患者床号:</label>
+<input type="text" id="patient-name" placeholder="输入患者床号" style="width: 100%; padding: 10px;">
+</div>
+<div class="form-group" style="margin-bottom: 10px;">
+<label for="bed-status">床位状态:</label>
+<select id="bed-status" style="width: 100%; padding: 10px;">
+<option value="empty">空床</option>
+<option value="occupied">占用</option>
+<option value="discharge_planned">拟出院</option>
+</select>
+</div>
+<div class="form-group" style="margin-bottom: 10px;">
+<label for="bed-remarks">备注:</label>
+<textarea id="bed-remarks" rows="3" style="width: 100%; padding: 5px;"></textarea>
+</div>
+<div class="modal-buttons" style="text-align: right;">
+<button id="clear-btn" style="margin-right: 5px; padding: 5px 10px;">清空</button>
+<button id="cancel-btn" style="margin-right: 5px; padding: 5px 10px;">取消</button>
+<button id="confirm-btn" style="padding: 5px 10px; background-color: #007acc; color: white; border: none; border-radius: 3px;">确认</button>
+</div>
+</div>
+</div>
 </body>
 </html>

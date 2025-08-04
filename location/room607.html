@@ -272,28 +272,78 @@
         <a href="room607.html" class="active">607室</a>
     </div>
     
-    <div class="room-title">2025年__月__日607室床位分布图, 病人总数___人</div>
+    <div class="room-title">
+        <span id="current-date"></span>607室床位分布图, 
+        病人总数 <input type="number" id="patient-count" min="0" style="width:40px"> 人,
+        预出院 <input type="number" id="discharge-count" min="0" style="width:40px"> 人
+    </div>
+    <script>
+        // Set current date
+        const now = new Date();
+        document.getElementById('current-date').textContent = 
+            `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+        
+        // Load saved counts
+        const counts = JSON.parse(localStorage.getItem('roomCounts') || '{}');
+        document.getElementById('patient-count').value = counts.patientCount || '';
+        document.getElementById('discharge-count').value = counts.dischargeCount || '';
+        
+        // Save counts when changed
+        ['patient-count', 'discharge-count'].forEach(id => {
+            document.getElementById(id).addEventListener('change', function() {
+                const counts = {
+                    patientCount: document.getElementById('patient-count').value,
+                    dischargeCount: document.getElementById('discharge-count').value
+                };
+                localStorage.setItem('roomCounts', JSON.stringify(counts));
+            });
+        });
+    </script>
     
     <div class="room-container" id="room607-container">
         <!-- 607室布局将通过JavaScript生成 -->
     </div>
     
-    <div class="signature-box">
-        <div class="signature-line">护士签名：________________</div>
-        <div class="signature-line">日期：____年__月__日</div>
+    <div class="signature-box" style="text-align: center; margin: 20px 0;">
+        <div style="margin-bottom: 10px;">
+            护士签名: <input type="text" id="nurse-signature" style="width: 200px; text-align: center;">
+        </div>
+        <div>
+            日期: <input type="date" id="signature-date" style="width: 150px; text-align: center;">
+        </div>
     </div>
+    <script>
+        // Load saved signature
+        const signatureData = JSON.parse(localStorage.getItem('signatureData') || '{}');
+        document.getElementById('nurse-signature').value = signatureData.nurseName || '';
+        document.getElementById('signature-date').value = signatureData.signatureDate || '';
+        
+        // Save signature when changed
+        ['nurse-signature', 'signature-date'].forEach(id => {
+            document.getElementById(id).addEventListener('change', function() {
+                const signatureData = {
+                    nurseName: document.getElementById('nurse-signature').value,
+                    signatureDate: document.getElementById('signature-date').value
+                };
+                localStorage.setItem('signatureData', JSON.stringify(signatureData));
+            });
+        });
+    </script>
 
     <script src="room607.js"></script>
     <script>
         // 页面加载完成后渲染布局
         document.addEventListener('DOMContentLoaded', function() {
             renderRoom607();
+            
+            // 绑定模态框事件处理程序
+            document.getElementById('confirm-btn')?.addEventListener('click', saveBedData);
+            document.getElementById('cancel-btn')?.addEventListener('click', closeModal);
+            document.getElementById('clear-btn')?.addEventListener('click', clearBedData);
+            
+            // 将openBedModal函数暴露给全局
+            window.openExistingBedModal = openBedModal;
         });
-        
-        // 床位编辑模态框功能（简化版）
-        function openBedModal(bedId) {
-            alert(`点击了床位 ${bedId}，这里可以添加编辑功能`);
-        }
     </script>
 </body>
 </html>

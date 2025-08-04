@@ -8,71 +8,66 @@ const room605Config = {
     beds: [
         // 竖向床位 (rotation: 0)
         // Image (~20, -40). HTML: x=20, y=-40 * -1.6 = 64
-        { id: "605-06", position: { x: 20, y: 64 }, rotation: 0, hasOxygen: true },
+        { id: "605-06", position: { x: 20, y: 64 }, rotation: 90, hasOxygen: true },
         // Image (~20, -90). HTML: x=20, y=-90 * -1.6 = 144
-        { id: "605-07", position: { x: 20, y: 144 }, rotation: 0, hasOxygen: true },
+        { id: "605-07", position: { x: 20, y: 164 }, rotation:90, hasOxygen: true },
         // Image (~290, -30). HTML: x=290, y=-30 * -1.6 = 48
-        { id: "605-05", position: { x: 290, y: 48 }, rotation: 0, hasOxygen: true },
+        { id: "605-05", position: { x: 270, y:0 }, rotation: 0, hasOxygen: true },
+        { id: "加床", position: { x: 140, y:0 }, rotation: 0, hasOxygen: true },
+        { id: "加床", position: { x: 380, y:0 }, rotation: 0, hasOxygen: true },
         // Image (~400, -40). HTML: x=400, y=-40 * -1.6 = 64
-        { id: "605-03", position: { x: 400, y: 64 }, rotation: 0, hasOxygen: true },
+        { id: "605-03", position: { x: 437, y: 64 }, rotation: 90, hasOxygen: true },
         // Image (~400, -100). HTML: x=400, y=-100 * -1.6 = 160
-        { id: "605-02", position: { x: 400, y: 160 }, rotation: 0, hasOxygen: true },
+        { id: "605-02", position: { x: 437, y: 180 }, rotation: 90, hasOxygen: true },
         
         // 横向床位 (rotation: 90)
         // Image (~350, -180). HTML: x=350, y=-180 * -1.6 = 288
-        { id: "605-01", position: { x: 350, y: 288 }, rotation: 90, hasOxygen: false }
+        { id: "605-01", position: { x: 350, y: 337 }, rotation: 90, hasOxygen: false }
     ],
     facilities: [
         // 库房1 (Warehouse 1): Image (~0, -150) to (~200, -200). HTML: x=0, y=240, w=200, h=80
-        { type: "warehouse", label: "库房1", position: { x: 0, y: 240 }, width: 200, height: 80 },
+        { type: "warehouse", label: "库房1", position: { x: 0, y: 318 }, width: 200, height: 80 },
         // 感应门 (Induction Door): Image (~210, -190). HTML: x=210, y=304
-        { type: "induction_door", label: "感应门", position: { x: 210, y: 360 }, width: 60, height: 40 },
-        // 感应门 (Induction Door): Image (~270, -190). HTML: x=270, y=304
-        { type: "induction_door", label: "感应门", position: { x: 270, y: 304 }, width: 60, height: 40 },
+        { type: "induction_door", label: "感应门", position: { x: 210, y: 358 }, width: 60, height: 40 },
+                
         // 主门 (Main Door)
-        { type: "induction_door", label: "门", position: { x: 0, y: 100 }, width: 60, height: 40 },
-        // 电脑 (Computer): Image (~420, -190). HTML: x=420, y=304
-        { type: "computer", label: "电脑", position: { x: 420, y: 304 } },
-        // 洗手池 (Washbasin): Image (~480, -160). HTML: x=480, y=256
-        { type: "washbasin", label: "洗手池", position: { x: 480, y: 256 } },
         
-        // 无名矩形结构/隔断 (Structures):
-        // Image (~200, -30) to (~250, -60). HTML: x=200, y=48, w=50, h=48
-        { type: "structure", label: "结构", position: { x: 200, y: 48 }, width: 50, height: 48 },
-        // Image (~260, -30) to (~310, -60). HTML: x=260, y=48, w=50, h=48
-        { type: "structure", label: "结构", position: { x: 260, y: 48 }, width: 50, height: 48 },
+        // 电脑 (Computer): Image (~420, -190). HTML: x=420, y=304
+        { type: "computer", label: "电脑", position: { x: 420, y: 384 } },
+        // 洗手池 (Washbasin): Image (~480, -160). HTML: x=480, y=256
+        { type: "washbasin", label: "洗手池", position: { x: 447, y: 276 } },
+        
+        
 
         // 隔离病房 (Isolation Wards):
         // Image (~100, -240). HTML: x=100, y=384, w=100, h=30
-        { type: "isolation_ward", label: "隔离病房1", position: { x: 100, y: 400 }, width: 100, height: 30 },
+        { type: "isolation_ward", label: "隔离病房1", position: { x: 520, y: 100 }, width: 100, height: 30 },
         // Image (~300, -240). HTML: x=300, y=384, w=100, h=30
-        { type: "isolation_ward", label: "隔离病房2", position: { x: 300, y: 400 }, width: 100, height: 30 }
+        { type: "isolation_ward", label: "隔离病房2", position: { x: 520, y: 300 }, width: 100, height: 30 }
     ],
     // 氧源接口位置 (◉)
     oxygenSources: [
         // Near 605-06: Image (~0, -10). HTML: x=0, y=16
-        { position: { x: 0, y: 16 }, symbol: "◉" },
+        { position: { x: 210, y: 2 }, symbol: "◉" },
         // Near 605-07: Image (~0, -70). HTML: x=0, y=112
-        { position: { x: 0, y: 112 }, symbol: "◉" },
+        { position: { x: 0, y: 152 }, symbol: "◉" },
+         { position: { x: 0, y: 42 }, symbol: "◉" },
         // Near 605-05: Image (~340, -10). HTML: x=340, y=16
-        { position: { x: 340, y: 16 }, symbol: "◉" },
+        { position: { x: 340, y: 2 }, symbol: "◉" },
         // Near 605-03: Image (~470, -60). HTML: x=470, y=96
-        { position: { x: 470, y: 96 }, symbol: "◉" },
+        { position: { x: 490, y: 140 }, symbol: "◉" },
         // Near 605-02: Image (~470, -130). HTML: x=470, y=208
-        { position: { x: 470, y: 208 }, symbol: "◉" }
+        { position: { x: 490, y: 250 }, symbol: "◉" }
     ],
     // 机械吊塔位置
     mechanicalTowers: [
-        // Near 605-06: Image (~70, -20). HTML: x=70, y=32
-        { position: { x: 70, y: 32 }, label: "机械吊塔" },
-        // Near 605-07: Image (~70, -120). HTML: x=70, y=192
-        { position: { x: 70, y: 192 }, label: "机械吊塔" },
-        // Near 605-05: Image (~300, -20). HTML: x=300, y=32
-        { position: { x: 300, y: 32 }, label: "机械吊塔" },
-        // Near 605-03: Image (~400, -80). HTML: x=400, y=128
-        { position: { x: 400, y: 128 }, label: "机械吊塔" },
-        // Near 605-02: Image (~400, -140). HTML: x=400, y=224
-        { position: { x: 400, y: 224 }, label: "机械吊塔" }
+        // 需要竖起来
+        { position: { x: 200, y: 32 }, label: "机械吊臂" },
+        { position: { x: 330, y: 32 }, label: "机械吊臂" }, 
+        //横向即可
+        { position: { x: 20, y: 153 }, label: "机械吊臂" ,},
+        { position: { x: 450, y: 138 }, label: "机械吊臂" },
+        { position: { x: 450, y: 170 }, label: "机械吊臂" }
     ]
 };
 
@@ -174,6 +169,103 @@ function renderRoom605() {
         
         container.appendChild(bedEl);
     });
+}
+
+// 创建床位编辑模态框
+function createBedModal() {
+    const modal = document.createElement('div');
+    modal.id = 'bed-modal';
+    modal.className = 'modal';
+    
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>床位信息 - <span id="modal-bed-id"></span></h3>
+            <div class="form-group">
+                <label for="patient-name">患者床号:</label>
+                <input type="text" id="patient-name" placeholder="输入患者床号">
+            </div>
+            <div class="form-group">
+                <label for="bed-status">床位状态:</label>
+                <select id="bed-status">
+                    <option value="empty">空床</option>
+                    <option value="occupied">占用</option>
+                    <option value="discharge_planned">拟出院</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bed-remarks">备注:</label>
+                <textarea id="bed-remarks" rows="3"></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button id="clear-btn">清空</button>
+                <button id="cancel-btn">取消</button>
+                <button id="confirm-btn">确认</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    return modal;
+}
+
+// 床位编辑模态框功能
+function openBedModal(bedId) {
+    let modal = document.getElementById('bed-modal');
+    if (!modal) {
+        modal = createBedModal();
+    }
+    
+    document.getElementById('modal-bed-id').textContent = bedId;
+    
+    // 填充现有数据
+    const bed = room605BedData[bedId] || { patientName: '', status: 'empty', remarks: '' };
+    document.getElementById('patient-name').value = bed.patientName || '';
+    document.getElementById('bed-status').value = bed.status || 'empty';
+    document.getElementById('bed-remarks').value = bed.remarks || '';
+    
+    modal.style.display = 'block';
+    
+    // 绑定按钮事件
+    document.getElementById('confirm-btn').onclick = saveBedData;
+    document.getElementById('cancel-btn').onclick = closeModal;
+    document.getElementById('clear-btn').onclick = clearBedData;
+}
+
+// 保存床位数据
+function saveBedData() {
+    const bedId = document.getElementById('modal-bed-id').textContent;
+    room605BedData[bedId] = {
+        patientName: document.getElementById('patient-name').value,
+        status: document.getElementById('bed-status').value,
+        remarks: document.getElementById('bed-remarks').value
+    };
+    
+    // 保存数据到本地存储
+    localStorage.setItem('room605BedData', JSON.stringify(room605BedData));
+    
+    closeModal();
+    renderRoom605(); // 重新渲染以更新显示
+}
+
+// 关闭模态框
+function closeModal() {
+    document.getElementById('bed-modal').style.display = 'none';
+}
+
+// 清空床位数据
+function clearBedData() {
+    const bedId = document.getElementById('modal-bed-id').textContent;
+    room605BedData[bedId] = {
+        patientName: '',
+        status: 'empty',
+        remarks: ''
+    };
+    
+    // 保存数据到本地存储
+    localStorage.setItem('room605BedData', JSON.stringify(room605BedData));
+    
+    closeModal();
+    renderRoom605(); // 重新渲染以更新显示
 }
 
 // 初始化床位数据

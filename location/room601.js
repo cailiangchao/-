@@ -346,7 +346,7 @@ function updateTitleInfo() {
     // 如果显示调试模式，在标题中显示
     const debugMode = window.showElementBoundaries ? ' [调试模式]' : '';
     
-    titleEl.textContent = `${year}年${month}月${day}日601室床位分布图, 病人总数${patientCount}人${debugMode}`;
+    titleEl.textContent = `${year}年${month}月${day}日601室床位分布图, 病人总数${patientCount}人${debugMode},预出院${1}人`;
 }
 
 // 添加位置信息显示的辅助函数
@@ -372,16 +372,101 @@ function addPositionInfo(element, x, y, width, height, color = 'blue') {
     element.appendChild(infoDiv);
 }
 
+// 创建床位编辑模态框
+function createBedModal() {
+    const modal = document.createElement('div');
+    modal.id = 'bed-modal';
+    modal.className = 'modal';
+    
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>床位信息 - <span id="modal-bed-id"></span></h3>
+            <div class="form-group">
+                <label for="patient-name">患者床号:</label>
+                <input type="text" id="patient-name" placeholder="输入患者床号">
+            </div>
+            <div class="form-group">
+                <label for="bed-status">床位状态:</label>
+                <select id="bed-status">
+                    <option value="empty">空床</option>
+                    <option value="occupied">占用</option>
+                    <option value="discharge_planned">拟出院</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bed-remarks">备注:</label>
+                <textarea id="bed-remarks" rows="3"></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button id="clear-btn">清空</button>
+                <button id="cancel-btn">取消</button>
+                <button id="confirm-btn">确认</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    return modal;
+}
+
 // 床位编辑模态框功能
 function openBedModal(bedId) {
-    // 如果有现有的模态框处理逻辑，可以调用它
-    if (typeof window.openExistingBedModal === 'function') {
-        window.openExistingBedModal(bedId);
-        return;
+    let modal = document.getElementById('bed-modal');
+    if (!modal) {
+        modal = createBedModal();
     }
     
-    // 否则使用简单的提示
-    alert(`点击了床位 ${bedId}，这里可以添加编辑功能`);
+    document.getElementById('modal-bed-id').textContent = bedId;
+    
+    // 填充现有数据
+    const bed = room601BedData[bedId] || { patientName: '', status: 'empty', remarks: '' };
+    document.getElementById('patient-name').value = bed.patientName || '';
+    document.getElementById('bed-status').value = bed.status || 'empty';
+    document.getElementById('bed-remarks').value = bed.remarks || '';
+    
+    modal.style.display = 'block';
+    
+    // 绑定按钮事件
+    document.getElementById('confirm-btn').onclick = saveBedData;
+    document.getElementById('cancel-btn').onclick = closeModal;
+    document.getElementById('clear-btn').onclick = clearBedData;
+}
+
+// 保存床位数据
+function saveBedData() {
+    const bedId = document.getElementById('modal-bed-id').textContent;
+    room601BedData[bedId] = {
+        patientName: document.getElementById('patient-name').value,
+        status: document.getElementById('bed-status').value,
+        remarks: document.getElementById('bed-remarks').value
+    };
+    
+    // 保存数据到本地存储
+    localStorage.setItem('room601BedData', JSON.stringify(room601BedData));
+    
+    closeModal();
+    renderRoom601(); // 重新渲染以更新显示
+}
+
+// 关闭模态框
+function closeModal() {
+    document.getElementById('bed-modal').style.display = 'none';
+}
+
+// 清空床位数据
+function clearBedData() {
+    const bedId = document.getElementById('modal-bed-id').textContent;
+    room601BedData[bedId] = {
+        patientName: '',
+        status: 'empty',
+        remarks: ''
+    };
+    
+    // 保存数据到本地存储
+    localStorage.setItem('room601BedData', JSON.stringify(room601BedData));
+    
+    closeModal();
+    renderRoom601(); // 重新渲染以更新显示
 }
 
 // 初始化

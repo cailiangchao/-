@@ -1,47 +1,42 @@
-// 603室床位布局配置 - 根据图片精准还原并进行坐标转换
+
 const room603Config = {
     canvasSize: { width: 500, height: 400 }, // 与HTML容器尺寸一致
     beds: [
         // 竖向床位 (rotation: 0)
-        { id: "603-06", position: { x: 70, y: 96 }, rotation: 0, hasOxygen: true },
-        { id: "603-07", position: { x: 70, y: 224 }, rotation: 0, hasOxygen: true },
-        { id: "603-05", position: { x: 300, y: 64 }, rotation: 0, hasOxygen: true },
-        { id: "603-03", position: { x: 400, y: 112 }, rotation: 0, hasOxygen: true },
-        { id: "603-02", position: { x: 400, y: 240 }, rotation: 0, hasOxygen: true },
+        { id: "603-06", position: { x: 20, y: 56 }, rotation: 90, hasOxygen: true },
+        { id: "603-07", position: { x: 20, y: 180 }, rotation: 90, hasOxygen: true },
+        { id: "603-05", position: { x: 250, y: 0 }, rotation: 0, hasOxygen: true },
+        { id: "加床", position: { x: 150, y: 0 }, rotation: 0, hasOxygen: true },
+        { id: "加床", position: { x: 350, y: 0 }, rotation: 0, hasOxygen: true },
+        { id: "603-03", position: { x: 440, y: 112 }, rotation: 90, hasOxygen: true },
+        { id: "603-02", position: { x: 440, y: 240 }, rotation: 90, hasOxygen: true },
         
         // 横向床位 (rotation: 90)
-        { id: "603-01", position: { x: 340, y: 368 }, rotation: 90, hasOxygen: false }
+        { id: "603-01", position: { x: 340, y: 342 }, rotation: 90, hasOxygen: false }
     ],
     facilities: [
-        { type: "warehouse", label: "库房2", position: { x: 0, y: 320 }, width: 280, height: 56 },
-        { type: "induction_door", label: "感应门", position: { x: 210, y: 360 }, width: 60, height: 40 },
-        { type: "induction_door", label: "感应门", position: { x: 290, y: 384 }, width: 60, height: 40 },
-        { type: "induction_door", label: "门", position: { x: 0, y: 100 }, width: 60, height: 40 },
+        { type: "warehouse", label: "库房2", position: { x: 0, y: 320 }, width: 180, height: 78 },
+        { type: "induction_door", label: "感应门", position: { x: 210, y: 358 }, width: 60, height: 40 },           
         { type: "computer", label: "电脑", position: { x: 450, y: 384 } },
-        // 无名矩形结构/隔断
-        { type: "structure", label: "结构", position: { x: 190, y: 112 }, width: 60, height: 128 },
-        { type: "structure", label: "结构", position: { x: 260, y: 112 }, width: 60, height: 128 }
     ],
     // 氧源接口位置 (◉)
     oxygenSources: [
-        { position: { x: 100, y: 16 }, symbol: "◉" }, // 靠近603-06
-        { position: { x: 100, y: 160 }, symbol: "◉" }, // 靠近603-07
-        { position: { x: 340, y: 32 }, symbol: "◉" }, // 靠近603-05
-        { position: { x: 440, y: 32 }, symbol: "◉" }, // 靠近603-03
-        { position: { x: 440, y: 160 }, symbol: "◉" }  // 靠近603-02
+        { position: { x: 00, y: 16 }, symbol: "◉" }, // 靠近603-06
+        { position: { x: 00, y: 160 }, symbol: "◉" }, // 靠近603-07
+        { position: { x: 310, y: 2 }, symbol: "◉" }, // 靠近603-05
+        { position: { x: 430, y: 2 }, symbol: "◉" }, // 靠近603-03
+        { position: { x: 490, y: 85 }, symbol: "◉" },  // 靠近603-02
+        { position: { x: 490, y: 240 }, symbol: "◉" }  // 靠近603-02
     ],
     // 机械吊塔位置
     mechanicalTowers: [
-        { position: { x: 70, y: 48 }, label: "机械吊塔" },   // 603-06 左
-        { position: { x: 130, y: 64 }, label: "机械吊塔" },   // 603-06 右
-        { position: { x: 70, y: 176 }, label: "机械吊塔" },  // 603-07 左
-        { position: { x: 130, y: 192 }, label: "机械吊塔" },  // 603-07 右
-        { position: { x: 270, y: 80 }, label: "机械吊塔" },  // 603-05 左
-        { position: { x: 330, y: 80 }, label: "机械吊塔" },  // 603-05 右
-        { position: { x: 370, y: 128 }, label: "机械吊塔" }, // 603-03 左
-        { position: { x: 430, y: 128 }, label: "机械吊塔" }, // 603-03 右
-        { position: { x: 370, y: 256 }, label: "机械吊塔" }, // 603-02 左
-        { position: { x: 430, y: 256 }, label: "机械吊塔" }  // 603-02 右
+        { position: { x: 10, y: 20 }, label: "机械吊臂" },   // 603-06 左
+        { position: { x: 10, y: 170 }, label: "机械吊臂" },   // 603-06 右
+        { position: { x: 190, y: 12 }, label: "机械吊臂" },  // 竖起来
+        { position: { x: 300, y: 12 }, label: "机械吊臂" },  // 竖起来
+        { position: { x: 460, y: 80 }, label: "机械吊臂" },  // 603-05 左
+        { position: { x: 460, y: 220 }, label: "机械吊臂" },  // 603-05 右
+ 
     ]
 };
 
@@ -78,8 +73,7 @@ function renderRoom603() {
             facilityEl.style.width = `${facility.width}px`;
             facilityEl.style.height = `${facility.height}px`;
         }
-        // induction_door 和 washbasin 的尺寸已在CSS中定义
-        
+              
         facilityEl.textContent = facility.label;
         container.appendChild(facilityEl);
     });
@@ -121,9 +115,7 @@ function renderRoom603() {
         bedEl.id = `bed-${bed.id}`;
         bedEl.style.left = `${bed.position.x}px`;
         bedEl.style.top = `${bed.position.y}px`;
-        
-        // 无论旋转与否，床位的基础尺寸都设定为40px宽，80px高（即竖向时）
-        // 旋转会将其视觉上变为横向（80px宽，40px高）
+       
         bedEl.style.width = '40px';
         bedEl.style.height = '80px';
         bedEl.style.transform = `rotate(${bed.rotation}deg)`;
@@ -143,6 +135,103 @@ function renderRoom603() {
         
         container.appendChild(bedEl);
     });
+}
+
+// 创建床位编辑模态框
+function createBedModal() {
+    const modal = document.createElement('div');
+    modal.id = 'bed-modal';
+    modal.className = 'modal';
+    
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>床位信息 - <span id="modal-bed-id"></span></h3>
+            <div class="form-group">
+                <label for="patient-name">患者床号:</label>
+                <input type="text" id="patient-name" placeholder="输入患者床号">
+            </div>
+            <div class="form-group">
+                <label for="bed-status">床位状态:</label>
+                <select id="bed-status">
+                    <option value="empty">空床</option>
+                    <option value="occupied">占用</option>
+                    <option value="discharge_planned">拟出院</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bed-remarks">备注:</label>
+                <textarea id="bed-remarks" rows="3"></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button id="clear-btn">清空</button>
+                <button id="cancel-btn">取消</button>
+                <button id="confirm-btn">确认</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    return modal;
+}
+
+// 床位编辑模态框功能
+function openBedModal(bedId) {
+    let modal = document.getElementById('bed-modal');
+    if (!modal) {
+        modal = createBedModal();
+    }
+    
+    document.getElementById('modal-bed-id').textContent = bedId;
+    
+    // 填充现有数据
+    const bed = room603BedData[bedId] || { patientName: '', status: 'empty', remarks: '' };
+    document.getElementById('patient-name').value = bed.patientName || '';
+    document.getElementById('bed-status').value = bed.status || 'empty';
+    document.getElementById('bed-remarks').value = bed.remarks || '';
+    
+    modal.style.display = 'block';
+    
+    // 绑定按钮事件
+    document.getElementById('confirm-btn').onclick = saveBedData;
+    document.getElementById('cancel-btn').onclick = closeModal;
+    document.getElementById('clear-btn').onclick = clearBedData;
+}
+
+// 保存床位数据
+function saveBedData() {
+    const bedId = document.getElementById('modal-bed-id').textContent;
+    room603BedData[bedId] = {
+        patientName: document.getElementById('patient-name').value,
+        status: document.getElementById('bed-status').value,
+        remarks: document.getElementById('bed-remarks').value
+    };
+    
+    // 保存数据到本地存储
+    localStorage.setItem('room603BedData', JSON.stringify(room603BedData));
+    
+    closeModal();
+    renderRoom603(); // 重新渲染以更新显示
+}
+
+// 关闭模态框
+function closeModal() {
+    document.getElementById('bed-modal').style.display = 'none';
+}
+
+// 清空床位数据
+function clearBedData() {
+    const bedId = document.getElementById('modal-bed-id').textContent;
+    room603BedData[bedId] = {
+        patientName: '',
+        status: 'empty',
+        remarks: ''
+    };
+    
+    // 保存数据到本地存储
+    localStorage.setItem('room603BedData', JSON.stringify(room603BedData));
+    
+    closeModal();
+    renderRoom603(); // 重新渲染以更新显示
 }
 
 // 初始化床位数据
