@@ -50,41 +50,38 @@ const room601Config = {
         { position: { x: 540, y: 0 }, symbol: "◉" },  // 601-07
         { position: { x: 610, y: 0 }, symbol: "◉" },  // 601-06
         { position: { x: 680, y: 0 }, symbol: "◉" },  // 601-05
-        
+        { position: { x: 755, y: 0 }, symbol: "◉" },
         // 左侧床位的氧源 - X轴在两床位间
         { position: { x: 15, y: 260 }, symbol: "◉" },  // 601-16
         { position: { x: 85, y: 260 }, symbol: "◉" },  // 601-16与601-17之间
-        { position: { x: 150, y: 190 }, symbol: "◉" }, // 601-17
-        
-        // 中间位置的氧源 - Y轴118
-        { position: { x: 105, y: 118 }, symbol: "◉" }, // 中间位置
-        { position: { x: 425, y: 118 }, symbol: "◉" }, // 中间位置
-        { position: { x: 515, y: 118 }, symbol: "◉" }, // 中间位置
-        { position: { x: 605, y: 118 }, symbol: "◉" }, // 中间位置
-        
-        // 中下区域床位的氧源
-        { position: { x: 380, y: 260 }, symbol: "◉" }, // 601-19
-        { position: { x: 425, y: 240 }, symbol: "◉" }, // 601-19与601-20之间
+        { position: { x: 660, y: 380 }, symbol: "◉" }, //601-01
+        { position: { x: 730, y: 380 }, symbol: "◉" },
+        { position: { x: 330, y: 260 }, symbol: "◉" }, // 601-19
+        // 601-19与601-20之间
         { position: { x: 470, y: 260 }, symbol: "◉" }, // 601-20
-        { position: { x: 515, y: 240 }, symbol: "◉" }, // 601-20与601-21之间
-        { position: { x: 560, y: 260 }, symbol: "◉" }, // 601-21
-        { position: { x: 605, y: 240 }, symbol: "◉" }, // 601-21与601-22之间
-        { position: { x: 650, y: 260 }, symbol: "◉" }, // 601-22
+         // 601-20与601-21之间
+        { position: { x: 400, y: 260 }, symbol: "◉" }, // 601-21
         
-        // 右下区域床位的氧源
-        { position: { x: 730, y: 180 }, symbol: "◉" }, // 601-03
-        { position: { x: 770, y: 200 }, symbol: "◉" }, // 601-03右侧
+        { position: { x: 530, y: 260 }, symbol: "◉" }, // 601-22
+        
+        { position: { x: 780, y: 180 }, symbol: "◉" }, // 601-03右侧
         
         // 底部床位的氧源
-        { position: { x: 130, y: 375 }, symbol: "◉" }, // 601-18
-        { position: { x: 170, y: 350 }, symbol: "◉" }, // 601-18右侧
-        { position: { x: 540, y: 375 }, symbol: "◉" }, // 601-01
-        { position: { x: 580, y: 350 }, symbol: "◉" }  // 601-01右侧
+        { position: { x: 100, y: 375 }, symbol: "◉" }, // 601-18
+       
+   
     ],
-    // 机械吊塔位置
+    // 机械吊臂位置
     mechanicalTowers: [
-        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊塔" }
-        
+        { position: { x: 50, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
+        { position: { x: 70, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
+        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
+        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
+        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
+        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
+        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
+        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
+        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" }
     ]
 };
 

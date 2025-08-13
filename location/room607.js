@@ -30,18 +30,18 @@ const room607Config = {
     canvasSize: { width: CANVAS_WIDTH, height: CANVAS_HEIGHT },
     beds: [
         // 第一排床位 (Y约-50)
-        { id: "607-01", position: { x: mapX(150), y: mapY(-50) }, rotation: 0, hasOxygen: false }, // 01-11是白色床位
-        { id: "607-02", position: { x: mapX(210), y: mapY(-50) }, rotation: 0, hasOxygen: false },
-        { id: "607-03", position: { x: mapX(270), y: mapY(-50) }, rotation: 0, hasOxygen: false },
-        { id: "607-05", position: { x: mapX(330), y: mapY(-50) }, rotation: 0, hasOxygen: false },
-        { id: "607-06", position: { x: mapX(390), y: mapY(-50) }, rotation: 0, hasOxygen: false },
-        { id: "607-07", position: { x: mapX(450), y: mapY(-50) }, rotation: 0, hasOxygen: false },
-        { id: "607-08", position: { x: mapX(510), y: mapY(-50) }, rotation: 0, hasOxygen: false },
-        { id: "607-09", position: { x: mapX(570), y: mapY(-50) }, rotation: 0, hasOxygen: false },
-        { id: "607-10", position: { x: mapX(630), y: mapY(-50) }, rotation: 0, hasOxygen: false },
-        { id: "607-11", position: { x: mapX(690), y: mapY(-50) }, rotation: 0, hasOxygen: false },
-        { id: "607-12", position: { x: mapX(840), y: mapY(-50) }, rotation: 0, hasOxygen: false, type: 'infection-bed' }, // 12,13是黄色床位
-        { id: "607-13", position: { x: mapX(900), y: mapY(-50) }, rotation: 0, hasOxygen: false, type: 'infection-bed' },
+        { id: "607-01", position: { x: mapX(150), y: mapY(-0) }, rotation: 0, hasOxygen: false }, // 01-11是白色床位
+        { id: "607-02", position: { x: mapX(210), y: mapY(-0) }, rotation: 0, hasOxygen: false },
+        { id: "607-03", position: { x: mapX(270), y: mapY(-0) }, rotation: 0, hasOxygen: false },
+        { id: "607-05", position: { x: mapX(330), y: mapY(-0) }, rotation: 0, hasOxygen: false },
+        { id: "607-06", position: { x: mapX(390), y: mapY(-0) }, rotation: 0, hasOxygen: false },
+        { id: "607-07", position: { x: mapX(450), y: mapY(-0) }, rotation: 0, hasOxygen: false },
+        { id: "607-08", position: { x: mapX(510), y: mapY(-0) }, rotation: 0, hasOxygen: false },
+        { id: "607-09", position: { x: mapX(570), y: mapY(-0) }, rotation: 0, hasOxygen: false },
+        { id: "607-10", position: { x: mapX(630), y: mapY(-0) }, rotation: 0, hasOxygen: false },
+        { id: "607-11", position: { x: mapX(690), y: mapY(-0) }, rotation: 0, hasOxygen: false },
+        { id: "607-12", position: { x: mapX(840), y: mapY(-0) }, rotation: 0, hasOxygen: false, type: 'infection-bed' }, // 12,13是黄色床位
+        { id: "607-13", position: { x: mapX(900), y: mapY(-0) }, rotation: 0, hasOxygen: false, type: 'infection-bed' },
 
         // 第二排床位 (Y约-170)
         { id: "607-15", position: { x: mapX(150), y: mapY(-170) }, rotation: 0, hasOxygen: false },
@@ -68,14 +68,14 @@ const room607Config = {
         { id: "607-39", position: { x: mapX(910), y: mapY(-320) }, rotation: 0, hasOxygen: false, type: 'infection-bed' },
 
         // 第四排床位 (Y约-420)
-        { id: "607-42", position: { x: mapX(150), y: mapY(-420) }, rotation: 0, hasOxygen: false },
-        { id: "607-43", position: { x: mapX(210), y: mapY(-420) }, rotation: 0, hasOxygen: false },
-        { id: "607-32", position: { x: mapX(600), y: mapY(-420) }, rotation: 0, hasOxygen: true }, // 607-32有氧源
-        { id: "607-31", position: { x: mapX(660), y: mapY(-420) }, rotation: 0, hasOxygen: false },
-        { id: "607-36", position: { x: mapX(750), y: mapY(-420) }, rotation: 0, hasOxygen: false, type: 'infection-bed' }, // 36,37,40,41是黄色床位
-        { id: "607-37", position: { x: mapX(810), y: mapY(-420) }, rotation: 0, hasOxygen: false, type: 'infection-bed' },
-        { id: "607-40", position: { x: mapX(870), y: mapY(-420) }, rotation: 0, hasOxygen: false, type: 'infection-bed' },
-        { id: "607-41", position: { x: mapX(930), y: mapY(-420) }, rotation: 0, hasOxygen: false, type: 'infection-bed' }
+        { id: "607-42", position: { x: mapX(150), y: mapY(-470) }, rotation: 0, hasOxygen: false },
+        { id: "607-43", position: { x: mapX(210), y: mapY(-470) }, rotation: 0, hasOxygen: false },
+        { id: "607-32", position: { x: mapX(540), y: mapY(-470) }, rotation: 0, hasOxygen: true }, // 607-32有氧源
+        { id: "607-31", position: { x: mapX(600), y: mapY(-470) }, rotation: 0, hasOxygen: false },
+        { id: "607-36", position: { x: mapX(690), y: mapY(-470) }, rotation: 0, hasOxygen: false, type: 'infection-bed' }, // 36,37,40,41是黄色床位
+        { id: "607-37", position: { x: mapX(750), y: mapY(-470) }, rotation: 0, hasOxygen: false, type: 'infection-bed' },
+        { id: "607-40", position: { x: mapX(870), y: mapY(-470) }, rotation: 0, hasOxygen: false, type: 'infection-bed' },
+        { id: "607-41", position: { x: mapX(930), y: mapY(-470) }, rotation: 0, hasOxygen: false, type: 'infection-bed' }
     ],
     facilities: [
         // 左侧区域
@@ -85,9 +85,9 @@ const room607Config = {
         { type: "small-bed-collection-area", label: "小床集中放置处", position: { x: mapX(0), y: mapY(-300) }, width: mapX(60), height: mapY(100) },
         
         // 设备带 (Equipment Belts)
-        { type: "equipment-belt", label: "设备带", position: { x: mapX(130), y: mapY(-130) }, width: mapX(600), height: mapY(20) },
-        { type: "equipment-belt", label: "设备带", position: { x: mapX(130), y: mapY(-300) }, width: mapX(150), height: mapY(20) },
-        { type: "equipment-belt", label: "设备带", position: { x: mapX(530), y: mapY(-300) }, width: mapX(150), height: mapY(20) },
+        
+        { type: "equipment-belt", label: "设备带", position: { x: mapX(130), y: mapY(-300) }, width: mapX(370), height: mapY(20) },
+        { type: "equipment-belt", label: "设备带", position: { x: mapX(530), y: mapY(-300) }, width: mapX(200), height: mapY(20) },
         { type: "equipment-belt", label: "设备带", position: { x: mapX(830), y: mapY(-300) }, width: mapX(150), height: mapY(20) },
 
         // 中间墙体和电脑
@@ -97,8 +97,8 @@ const room607Config = {
         { type: "cabinet", label: "柜子", position: { x: mapX(500), y: mapY(-450) }, width: mapX(50), height: mapY(30) },
 
         // 顶部门
-        { type: "door", label: "主门", position: { x: mapX(0), y: mapY(-100) }, width: mapX(40), height: mapY(30) },
-        { type: "door", label: "感应门", position: { x: mapX(210), y: mapY(-360) }, width: mapX(40), height: mapY(30) },
+        { type: "door", label: "门", position: { x: mapX(110), y: mapY(-525) }, width: mapX(40), height: mapY(30) },
+        { type: "door", label: "门", position: { x: mapX(820), y: mapY(-525) }, width: mapX(40), height: mapY(30) },
         
 
         // 区域标签
@@ -110,32 +110,7 @@ const room607Config = {
     ],
     // 氧源接口位置 (●)
     oxygenSources: [
-        // 第一排床位
-        { position: { x: mapX(180), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(240), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(300), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(360), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(420), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(480), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(540), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(600), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(660), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(720), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(870), y: mapY(-100) }, symbol: "●" },
-        { position: { x: mapX(930), y: mapY(-100) }, symbol: "●" },
-
-        // 第二排床位
-        { position: { x: mapX(180), y: mapY(-250) }, symbol: "●" },
-        { position: { x: mapX(240), y: mapY(-250) }, symbol: "●" },
-        { position: { x: mapX(300), y: mapY(-250) }, symbol: "●" },
-        { position: { x: mapX(360), y: mapY(-250) }, symbol: "●" },
-        { position: { x: mapX(480), y: mapY(-250) }, symbol: "●" },
-        { position: { x: mapX(540), y: mapY(-250) }, symbol: "●" },
-        { position: { x: mapX(600), y: mapY(-250) }, symbol: "●" },
-        { position: { x: mapX(660), y: mapY(-250) }, symbol: "●" },
-        { position: { x: mapX(720), y: mapY(-250) }, symbol: "●" },
-        { position: { x: mapX(870), y: mapY(-250) }, symbol: "●" },
-        { position: { x: mapX(930), y: mapY(-250) }, symbol: "●" },
+      
 
         // 第三排床位
         { position: { x: mapX(180), y: mapY(-370) }, symbol: "●" },
