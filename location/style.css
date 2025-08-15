@@ -95,3 +95,15 @@
     color: white;
     border: none;
 }
+
+/* 墙体样式 */
+.wall {
+    border: 1px solid #333;
+    background-color: #e0e0e0;
+    height: 160px; /* 默认墙体高度 */
+}
+
+.wall.textured {
+    background-color: #d3d3d3;
+    height: 160px; /* 纹理墙体的高度 */
+}

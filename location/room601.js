@@ -73,15 +73,27 @@ const room601Config = {
     ],
     // 机械吊臂位置
     mechanicalTowers: [
-        { position: { x: 50, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
-        { position: { x: 70, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
-        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
-        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
-        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
-        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
-        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
-        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" },
-        { position: { x: 750, y: 150 }, width: 100, height: 30, label: "机械吊臂" }
+        //靠窗侧吊臂
+        { position: { x: 20, y: 30 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 100, y: 30 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 170, y: 30 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 240, y: 30 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 310, y: 30 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 380, y: 30 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 450, y: 30 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 520, y: 30 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 590, y: 30 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 660, y: 30 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        //靠墙侧吊臂
+        { position: { x: -5, y: 230 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 60, y: 230 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 310, y: 230 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 380, y: 230 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 450, y: 230 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 640, y: 350 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+        { position: { x: 710, y: 350 }, rotation: 90, width: 50, height: 20, label: "吊臂" },
+
+        { position: { x: 750, y: 110 }, rotation: 0, width: 50, height: 20, label: "机械吊臂" }
     ]
 };
 
@@ -237,7 +249,15 @@ function renderRoom601() {
         towerEl.style.justifyContent = 'center';
         towerEl.style.alignItems = 'center';
         towerEl.style.border = '1px solid #333';
-        towerEl.textContent = tower.label;
+        towerEl.style.transform = `rotate(${tower.rotation || 0}deg)`;
+        towerEl.style.transformOrigin = 'center center';
+        
+        // 保持文字垂直显示
+        const labelSpan = document.createElement('span');
+        labelSpan.textContent = tower.label;
+        labelSpan.style.transform = `rotate(${-1 * (tower.rotation || 0)}deg)`;
+        labelSpan.style.display = 'inline-block';
+        towerEl.appendChild(labelSpan);
         
         // 调试模式：添加位置标识
         if (showBoundaries) {
