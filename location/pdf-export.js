@@ -50,6 +50,24 @@ function generateRoomPDF(roomNumber) {
         signatureBox.style[prop] = signatureStyles.getPropertyValue(prop);
     }
     
+    // 特别处理input元素的样式，确保高度正确
+    const originalInputs = originalTitle.querySelectorAll('input');
+    const clonedInputs = roomTitle.querySelectorAll('input');
+    for (let i = 0; i < originalInputs.length; i++) {
+        const originalInput = originalInputs[i];
+        const clonedInput = clonedInputs[i];
+        if (originalInput && clonedInput) {
+            const inputStyles = window.getComputedStyle(originalInput);
+            for (let j = 0; j < inputStyles.length; j++) {
+                const prop = inputStyles[j];
+                clonedInput.style[prop] = inputStyles.getPropertyValue(prop);
+            }
+            // 确保input元素可见并正确显示
+            clonedInput.style.display = '';
+            clonedInput.style.visibility = 'visible';
+        }
+    }
+    
     // 确保克隆元素可见
     roomTitle.style.display = '';
     roomTitle.style.visibility = 'visible';
@@ -110,7 +128,7 @@ function generateRoomPDF(roomNumber) {
                 console.error('PDF generation failed:', error);
             });
         });
-    }, 500); // 增加延迟确保渲染完成
+    }, 100); // 增加延迟确保渲染完成
 }
 
 function getStatusText(status) {
