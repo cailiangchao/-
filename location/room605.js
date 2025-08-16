@@ -39,11 +39,9 @@ const room605Config = {
         
         
 
-        // 隔离病房 (Isolation Wards):
-        // Image (~100, -240). HTML: x=100, y=384, w=100, h=30
-        { type: "isolation_ward", label: "隔离病房1", position: { x: 520, y: 100 }, width: 100, height: 30 },
-        // Image (~300, -240). HTML: x=300, y=384, w=100, h=30
-        { type: "isolation_ward", label: "隔离病房2", position: { x: 520, y: 300 }, width: 100, height: 30 }
+        // 隔离病房 (Isolation Wards) - now treated as beds
+        { id: "隔离病房1", position: { x: 520, y: 100 }, rotation: 0, width: 100, height: 50, isIsolation: true },
+        { id: "隔离病房2", position: { x: 520, y: 300 }, rotation: 0, width: 100, height: 50, isIsolation: true }
     ],
     // 氧源接口位置 (◉)
     oxygenSources: [
@@ -74,8 +72,9 @@ const room605Config = {
 // 床位数据状态 (与room602.js相同)
 let room605BedData = {};
 
-// 初始化床位数据
+// 初始化床位数据（包括隔离病房）
 function initRoom605BedData() {
+    // 普通床位
     room605Config.beds.forEach(bed => {
         room605BedData[bed.id] = {
             patientName: '',
@@ -83,6 +82,19 @@ function initRoom605BedData() {
             remarks: ''
         };
     });
+    
+    // 隔离病房
+    room605Config.facilities
+        .filter(f => f.isIsolation)
+        .forEach(ward => {
+            if (!room605BedData[ward.id]) {
+                room605BedData[ward.id] = {
+                    patientName: '',
+                    status: 'empty', 
+                    remarks: ''
+                };
+            }
+        });
 }
 
 // 渲染605室布局 (与room603.js渲染逻辑相同，只是引用不同的config)
@@ -140,20 +152,31 @@ function renderRoom605() {
         container.appendChild(towerEl);
     });
     
-    // 渲染床位 (渲染逻辑与room602.js完全一致)
-    room605Config.beds.forEach(bed => {
+    // 渲染床位 (包括隔离病房)
+    [...room605Config.beds, ...room605Config.facilities.filter(f => f.isIsolation)].forEach(bed => {
         const bedEl = document.createElement('div');
         bedEl.className = 'bed';
+        if (bed.isIsolation) {
+            bedEl.classList.add('isolation-ward');
+        }
         bedEl.id = `bed-${bed.id}`;
         bedEl.style.left = `${bed.position.x}px`;
         bedEl.style.top = `${bed.position.y}px`;
         
-        // 无论旋转与否，床位的基础尺寸都设定为40px宽，80px高（即竖向时）
-        // 旋转会将其视觉上变为横向（80px宽，40px高）
-        bedEl.style.width = '40px';
-        bedEl.style.height = '80px';
-        bedEl.style.transform = `rotate(${bed.rotation}deg)`;
-        bedEl.style.transformOrigin = 'center center'; // 旋转中心保持在元素中心
+        // 设置尺寸
+        bedEl.style.width = `${bed.width || 40}px`;
+        bedEl.style.height = `${bed.height || 80}px`;
+        bedEl.style.transform = `rotate(${bed.rotation || 0}deg)`;
+        bedEl.style.transformOrigin = 'center center';
+        
+        // 初始化床位数据（如果不存在）
+        if (!room605BedData[bed.id]) {
+            room605BedData[bed.id] = {
+                patientName: '',
+                status: 'empty',
+                remarks: ''
+            };
+        }
         
         // 添加床位状态类
         bedEl.classList.add(`bed-${room605BedData[bed.id].status}`);

@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>606室床位分布图</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="pdf-export.js"></script>
     <style>
         /* 容器样式，更新为1000px宽，500px高 */
         .room-container {
@@ -341,24 +344,25 @@
     <div class="signature-box" style="text-align: center; margin: 20px 0;">
         <div style="margin-bottom: 10px;">
             护士签名: <input type="text" id="nurse-signature" style="width: 200px; text-align: center;">
+            <button id="pdf-export-btn" style="margin-left: 20px; padding: 8px 15px; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;">提交</button>
         </div>
-        
     </div>
     <script>
         // Load saved signature
         const signatureData = JSON.parse(localStorage.getItem('signatureData') || '{}');
         document.getElementById('nurse-signature').value = signatureData.nurseName || '';
-        document.getElementById('signature-date').value = signatureData.signatureDate || '';
         
         // Save signature when changed
-        ['nurse-signature', 'signature-date'].forEach(id => {
-            document.getElementById(id).addEventListener('change', function() {
-                const signatureData = {
-                    nurseName: document.getElementById('nurse-signature').value,
-                    signatureDate: document.getElementById('signature-date').value
-                };
-                localStorage.setItem('signatureData', JSON.stringify(signatureData));
-            });
+        document.getElementById('nurse-signature').addEventListener('change', function() {
+            const signatureData = {
+                nurseName: document.getElementById('nurse-signature').value
+            };
+            localStorage.setItem('signatureData', JSON.stringify(signatureData));
+        });
+        
+        // 绑定PDF导出按钮事件
+        document.addEventListener('DOMContentLoaded', function() {
+            bindPDFExportButton('606');
         });
     </script>
 
