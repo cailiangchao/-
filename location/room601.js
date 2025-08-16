@@ -357,13 +357,39 @@ function updateTitleInfo() {
     const month = now.getMonth() + 1;
     const day = now.getDate();
     
+    // 保存用户输入的值
+    const patientCountInput = document.getElementById('patient-count');
+    const dischargeCountInput = document.getElementById('discharge-count');
+    const patientCountValue = patientCountInput ? patientCountInput.value : '';
+    const dischargeCountValue = dischargeCountInput ? dischargeCountInput.value : '';
+    
     // 计算病人总数
     const patientCount = Object.values(room601BedData).filter(data => data.patientName && data.patientName.trim() !== '').length;
     
     // 如果显示调试模式，在标题中显示
     const debugMode = window.showElementBoundaries ? ' [调试模式]' : '';
     
-    titleEl.textContent = `${year}年${month}月${day}日601室床位分布图, 病人总数${patientCount}人${debugMode},预出院${1}人`;
+    // 保留输入框，只更新日期和计算的病人总数
+    titleEl.innerHTML = `
+        <span id="current-date">${year}年${month}月${day}日</span>601室床位分布图, 
+        病人总数<input type="number" id="patient-count" min="0" style="width:40px" value="${patientCountValue}">人,
+        预出院<input type="number" id="discharge-count" min="0" style="width:40px; height: 25px;" value="${dischargeCountValue}">人
+        ${debugMode ? `<span class="debug-mode">${debugMode}</span>` : ''}
+    `;
+    
+    // 重新绑定事件监听器
+    ['patient-count', 'discharge-count'].forEach(id => {
+        const inputElement = document.getElementById(id);
+        if (inputElement) {
+            inputElement.addEventListener('change', function() {
+                const counts = {
+                    patientCount: document.getElementById('patient-count').value,
+                    dischargeCount: document.getElementById('discharge-count').value
+                };
+                localStorage.setItem('roomCounts', JSON.stringify(counts));
+            });
+        }
+    });
 }
 
 // 添加位置信息显示的辅助函数
