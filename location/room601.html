@@ -60,7 +60,7 @@
         }
         
         .patient-area {
-            font-size: 8px;
+            font-size: 15px;
             text-align: center;
             min-height: 12px;
             background-color: #f8f8f8;
@@ -204,8 +204,8 @@
     
     <div class="room-title">
         <span id="current-date"></span>601室床位分布图, 
-        病人总数<input type="number" id="patient-count" min="0" style="width:40px; height: 25px; padding: 2px; box-sizing: border-box;">人,
-        预出院<input type="number" id="discharge-count" min="0" style="width:40px; height: 25px; padding: 2px; box-sizing: border-box;">人
+        病人总数<input type="number" id="patient-count" min="0" style="width:40px; height: 35px; padding: 3px; box-sizing: border-box;">人,
+        预出院<input type="number" id="discharge-count" min="0" style="width:40px; height: 35px; padding: 3px; box-sizing: border-box;">人
         
     </div>
     <script>
@@ -234,6 +234,7 @@
     <div class="room-container" id="room601-container">
         <!-- 601室布局将通过JavaScript生成 -->
     </div>
+
     
     <!-- 坐标指示容器 -->
     <div id="coordinates-container"></div>
@@ -242,7 +243,9 @@
 
 
 
+    <script src="bed-manager.js"></script>
     <script src="room601.js"></script>
+    <script src="room601-enhanced.js"></script>
     <script>
         // 页面加载完成后渲染布局
         document.addEventListener('DOMContentLoaded', function() {
@@ -406,10 +409,24 @@
     </script>
     <div class="signature-box" style="text-align: center; margin: 20px 0;">
         <div style="margin-bottom: 10px;">
-            护士签名: <input type="text" id="nurse-signature" style="width: 200px; text-align: center;">
+            护士签名: <input type="text" id="nurse-signature" style="width: 200px;  height: 35px; text-align: center;">
         </div>
-        <button id="pdf-export-btn" style="margin-left: 20px; padding: 8px 15px; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;">提交</button>
+        <button id="load-last-btn" style="margin-right: 20px; padding: 8px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">加载上次</button>
+        <button id="pdf-export-btn" style="padding: 8px 15px; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;">提交</button>
     </div>
+    <script>
+        // 加载上次保存的数据
+        document.getElementById('load-last-btn').addEventListener('click', function() {
+            const savedData = localStorage.getItem('room601BedData');
+            if (savedData) {
+                room601BedData = JSON.parse(savedData);
+                renderRoom601();
+                alert('已加载上次保存的床位数据');
+            } else {
+                alert('没有找到上次保存的数据');
+            }
+        });
+    </script>
     <script>
         // Load saved signature
         const signatureData = JSON.parse(localStorage.getItem('signatureData') || '{}');

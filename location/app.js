@@ -28,34 +28,147 @@ function initApp() {
     const daySelect = document.getElementById('day-select');
 
     // 初始化日期选择器
-    initDatePicker(daySelect);
+    if (daySelect) {
+        initDatePicker(daySelect);
+    }
     
     // 加载数据
     loadBedData();
 
     // 绑定床位点击事件
-    bedContainer.addEventListener('click', function(e) {
-        const bedElement = e.target.closest('.bed');
-        if (bedElement) {
-            const bedId = bedElement.dataset.bedId;
-            currentBedId = bedId;
-            openBedModal(bedId);
+    if (bedContainer) {
+        bedContainer.addEventListener('click', function(e) {
+            const bedElement = e.target.closest('.bed');
+            if (bedElement) {
+                const bedId = bedElement.dataset.bedId;
+                currentBedId = bedId;
+                openBedModal(bedId);
+            }
+        });
+    }
+    
+    // 绑定模态框按钮事件
+    bindModalEvents();
+}
+
+// 绑定模态框事件
+function bindModalEvents() {
+    // 使用事件委托来处理动态创建的按钮
+    document.addEventListener('click', function(e) {
+        if (e.target.id === 'confirm-btn') {
+            saveBedData();
+        } else if (e.target.id === 'cancel-btn') {
+            closeModal();
+        } else if (e.target.id === 'clear-btn') {
+            clearBedData();
+        }
+    });
+    
+    // 监听患者姓名输入框的变化，提供实时反馈
+    document.addEventListener('input', function(e) {
+        if (e.target.id === 'patient-name') {
+            const patientName = e.target.value.trim();
+            const bedStatusSelect = document.getElementById('bed-status');
+            
+            if (patientName !== '' && bedStatusSelect.value === 'empty') {
+                // 自动将状态设置为占用，但不强制锁定
+                bedStatusSelect.value = 'occupied';
+                // 添加视觉反馈提示
+                bedStatusSelect.style.backgroundColor = '#e8f5e8';
+                setTimeout(() => {
+                    bedStatusSelect.style.backgroundColor = '';
+                }, 1000);
+            } else if (patientName === '') {
+                // 如果清空了姓名，自动设置为空床
+                bedStatusSelect.value = 'empty';
+                bedStatusSelect.style.backgroundColor = '#ffe8e8';
+                setTimeout(() => {
+                    bedStatusSelect.style.backgroundColor = '';
+                }, 1000);
+            }
+        }
+    });
+    
+    // 点击模态框背景关闭
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal')) {
+            closeModal();
+        }
+    });
+    
+    // ESC键关闭模态框
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
         }
     });
 }
 
+// 创建通用模态框
+function createBedModal() {
+    // 如果模态框已存在，直接返回
+    const existingModal = document.getElementById('bed-modal');
+    if (existingModal) {
+        return existingModal;
+    }
+    
+    const modal = document.createElement('div');
+    modal.id = 'bed-modal';
+    modal.className = 'modal';
+    
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>床位信息 - <span id="modal-bed-id"></span></h3>
+            <div class="form-group">
+                <label for="patient-name">患者床号:</label>
+                <input type="text" id="patient-name" placeholder="输入患者床号">
+            </div>
+            <div class="form-group">
+                <label for="bed-status">床位状态:</label>
+                <select id="bed-status">
+                    <option value="empty">空床</option>
+                    <option value="occupied">占用</option>
+                    <option value="discharge_planned">拟出院</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bed-remarks">备注:</label>
+                <textarea id="bed-remarks" rows="3"></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button id="clear-btn">清空</button>
+                <button id="cancel-btn">取消</button>
+                <button id="confirm-btn">确认</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    return modal;
+}
+
 // 打开床位编辑模态框
 function openBedModal(bedId) {
-    const modal = document.getElementById('bed-modal');
+    let modal = document.getElementById('bed-modal');
+    if (!modal) {
+        modal = createBedModal();
+    }
+    
+    currentBedId = bedId;
     document.getElementById('modal-bed-id').textContent = bedId;
     
     // 填充现有数据
     const bed = bedData[bedId] || { patientName: '', status: 'empty', remarks: '' };
-    document.getElementById('patient-name').value = bed.patientName;
-    document.getElementById('bed-status').value = bed.status;
-    document.getElementById('bed-remarks').value = bed.remarks;
+    document.getElementById('patient-name').value = bed.patientName || '';
+    document.getElementById('bed-status').value = bed.status || 'empty';
+    document.getElementById('bed-remarks').value = bed.remarks || '';
     
     modal.style.display = 'block';
+    
+    // 聚焦到患者姓名输入框
+    setTimeout(() => {
+        document.getElementById('patient-name').focus();
+    }, 100);
 }
 
 // 获取当前日期字符串 (YYYY-MM-DD)
@@ -109,6 +222,67 @@ function loadBedData() {
 // 保存所有床位数据到本地存储
 function saveAllBedData() {
     localStorage.setItem(`bedData_${currentDate}_${window.location.pathname}`, JSON.stringify(bedData));
+}
+
+// 保存单个床位数据并自动设置状态
+function saveBedData() {
+    const modal = document.getElementById('bed-modal');
+    if (!modal || !currentBedId) return;
+    
+    const patientName = document.getElementById('patient-name').value.trim();
+    const bedStatus = document.getElementById('bed-status').value;
+    const remarks = document.getElementById('bed-remarks').value;
+    
+    // 自动逻辑判断：如果输入了床号，自动设置为非空床状态
+    let finalStatus = bedStatus;
+    if (patientName !== '') {
+        // 如果输入了患者信息且当前状态是空床，自动改为占用状态
+        if (bedStatus === 'empty') {
+            finalStatus = 'occupied';
+        }
+    } else {
+        // 如果没有输入患者信息，强制设置为空床
+        finalStatus = 'empty';
+    }
+    
+    // 保存数据
+    bedData[currentBedId] = {
+        patientName: patientName,
+        status: finalStatus,
+        remarks: remarks
+    };
+    
+    // 如果状态被自动更改，更新界面上的选择框显示
+    if (finalStatus !== bedStatus) {
+        document.getElementById('bed-status').value = finalStatus;
+    }
+    
+    saveAllBedData();
+    renderBeds();
+    closeModal();
+}
+
+// 关闭模态框
+function closeModal() {
+    const modal = document.getElementById('bed-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// 清空床位数据
+function clearBedData() {
+    if (!currentBedId) return;
+    
+    bedData[currentBedId] = {
+        patientName: '',
+        status: 'empty',
+        remarks: ''
+    };
+    
+    saveAllBedData();
+    renderBeds();
+    closeModal();
 }
 
 // 初始化床位数据

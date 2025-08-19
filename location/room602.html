@@ -51,7 +51,7 @@
         }
         
         .patient-area {
-            font-size: 8px;
+            font-size: 15px;
             text-align: center;
             min-height: 12px;
             background-color: #f8f8f8;
@@ -166,6 +166,101 @@
             font-weight: bold;
             background-color: #e6f7ff;
         }
+
+        /* 床位状态样式 */
+        .bed.empty {
+            background-color: #e6f7ff;
+            border-color: #1890ff;
+        }
+
+        .bed.occupied {
+            background-color: #fff2e8;
+            border-color: #fa8c16;
+        }
+
+        .bed.discharge_planned {
+            background-color: #f6ffed;
+            border-color: #52c41a;
+        }
+
+        /* 加床样式 */
+        .bed.additional {
+            border: 2px dashed #52c41a !important;
+            background-color: #f6ffed;
+            box-shadow: 0 2px 8px rgba(82, 196, 26, 0.3);
+        }
+
+        .bed.additional:hover {
+            box-shadow: 0 4px 12px rgba(82, 196, 26, 0.5);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .bed.additional .bed-label {
+            background-color: #52c41a;
+            color: white;
+        }
+
+        /* 加床按钮样式 */
+        .add-bed-button {
+            transition: all 0.3s ease;
+        }
+
+        .add-bed-button:hover {
+            background-color: #73d13d !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(82, 196, 26, 0.3);
+        }
+
+        /* 拖拽样式 */
+        .bed.additional.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+
+        /* 容器拖拽状态 */
+        .room-container.drag-mode {
+            cursor: crosshair;
+            box-shadow: 0 0 15px rgba(82, 196, 26, 0.5);
+            border: 2px dashed #52c41a;
+        }
+
+        /* 床位统计信息样式 */
+        #bed-statistics {
+            padding: 10px;
+            background-color: #f0f2f5;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        /* 模式指示器动画 */
+        #mode-indicator {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* 冲突提示样式 */
+        .conflict-warning {
+            position: absolute;
+            background-color: #ff4d4f;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            z-index: 10001;
+            animation: fadeInOut 2s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-10px); }
+            50% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
+        }
     </style>
 </head>
 <body>
@@ -181,8 +276,8 @@
     
     <div class="room-title">
         <span id="current-date"></span>602室床位分布图, 
-        病人总数<input type="number" id="patient-count" min="0" style="width:40px; height: 25px; padding: 2px; box-sizing: border-box;">人,
-        预出院<input type="number" id="discharge-count" min="0" style="width:40px; height: 25px; padding: 2px; box-sizing: border-box;">人
+        病人总数<input type="number" id="patient-count" min="0" style="width:40px; height: 35px; padding: 2px; box-sizing: border-box;">人,
+        预出院<input type="number" id="discharge-count" min="0" style="width:40px; height: 35px; padding: 2px; box-sizing: border-box;">人
     </div>
     <script>
         // Set current date
@@ -211,12 +306,27 @@
         <!-- 602室布局将通过JavaScript生成 -->
     </div>
     
+    
     <div class="signature-box" style="text-align: center; margin: 20px 0;">
         <div style="margin-bottom: 10px;">
-            护士签名: <input type="text" id="nurse-signature" style="width: 200px; text-align: center;">
-            <button id="pdf-export-btn" style="margin-left: 20px; padding: 8px 15px; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;">提交</button>
+            护士签名: <input type="text" id="nurse-signature" style="width: 200px;  height: 35px; text-align: center;">
         </div>
+        <button id="load-last-btn" style="margin-right: 20px; padding: 8px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">加载上次</button>
+        <button id="pdf-export-btn" style="padding: 8px 15px; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;">提交</button>
     </div>
+    <script>
+        // 加载上次保存的数据
+        document.getElementById('load-last-btn').addEventListener('click', function() {
+            const savedData = localStorage.getItem('room602BedData');
+            if (savedData) {
+                room602BedData = JSON.parse(savedData);
+                renderRoom602();
+                alert('已加载上次保存的床位数据');
+            } else {
+                alert('没有找到上次保存的数据');
+            }
+        });
+    </script>
     <script>
         // Load saved signature
         const signatureData = JSON.parse(localStorage.getItem('signatureData') || '{}');
@@ -236,20 +346,96 @@
         });
     </script>
 
-    <script src="room602.js"></script>
+    <!-- 引入床位管理器 -->
+    <script src="bed-manager.js"></script>
+    <script src="room602-enhanced.js"></script>
     <script>
-        // 页面加载完成后渲染布局
+        // 页面加载完成后渲染布局 - 现在由增强版管理器处理
         document.addEventListener('DOMContentLoaded', function() {
-            renderRoom602();
+            // 增强版管理器会自动初始化和渲染
             
-            // 绑定模态框事件处理程序
-            document.getElementById('confirm-btn')?.addEventListener('click', saveBedData);
-            document.getElementById('cancel-btn')?.addEventListener('click', closeModal);
-            document.getElementById('clear-btn')?.addEventListener('click', clearBedData);
-            
-            // 将openBedModal函数暴露给全局
+            // 保留兼容性 - 将函数暴露给全局
             window.openExistingBedModal = openBedModal;
         });
+        
+        // 打开床位编辑模态框
+        function openBedModal(bedId) {
+            const modal = document.getElementById('bed-modal');
+            document.getElementById('modal-bed-id').textContent = bedId;
+            
+            // 填充现有数据
+            const bed = room602BedData[bedId] || { patientName: '', status: 'empty', remarks: '' };
+            document.getElementById('patient-name').value = bed.patientName || '';
+            document.getElementById('bed-status').value = bed.status || 'empty';
+            document.getElementById('bed-remarks').value = bed.remarks || '';
+            
+            modal.style.display = 'block';
+        }
+        
+        // 保存床位数据
+        function saveBedData() {
+            const bedId = document.getElementById('modal-bed-id').textContent;
+            room602BedData[bedId] = {
+                patientName: document.getElementById('patient-name').value,
+                status: document.getElementById('bed-status').value,
+                remarks: document.getElementById('bed-remarks').value
+            };
+            
+            // 保存数据到本地存储
+            localStorage.setItem('room602BedData', JSON.stringify(room602BedData));
+            
+            closeModal();
+            renderRoom602(); // 重新渲染以更新显示
+        }
+        
+        // 清空床位数据
+        function clearBedData() {
+            const bedId = document.getElementById('modal-bed-id').textContent;
+            room602BedData[bedId] = {
+                patientName: '',
+                status: 'empty',
+                remarks: ''
+            };
+            
+            // 保存数据到本地存储
+            localStorage.setItem('room602BedData', JSON.stringify(room602BedData));
+            
+            closeModal();
+            renderRoom602(); // 重新渲染以更新显示
+        }
+        
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('bed-modal').style.display = 'none';
+        }
     </script>
+
+    <!-- 床位编辑模态框 -->
+    <div id="bed-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 100;">
+        <div class="modal-content" style="background-color: white; margin: 15% auto; padding: 20px; width: 300px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+            <h3>床位信息 - <span id="modal-bed-id"></span></h3>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="patient-name">患者床号:</label>
+                <input type="text" id="patient-name" placeholder="输入患者床号" style="width: 100%; padding: 10px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="bed-status">床位状态:</label>
+                <select id="bed-status" style="width: 100%; padding: 10px;">
+                    <option value="empty">空床</option>
+                    <option value="occupied">占用</option>
+                    <option value="discharge_planned">拟出院</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="bed-remarks">备注:</label>
+                <textarea id="bed-remarks" rows="3" style="width: 100%; padding: 5px;"></textarea>
+            </div>
+            <div class="modal-buttons" style="text-align: right;">
+                <button id="clear-btn" style="margin-right: 5px; padding: 5px 10px;">清空</button>
+                <button id="cancel-btn" style="margin-right: 5px; padding: 5px 10px;">取消</button>
+                <button id="confirm-btn" style="padding: 5px 10px; background-color: #007acc; color: white; border: none; border-radius: 3px;">确认</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -46,7 +46,7 @@
 <body>
     <div class="header">
         <h1>每日床位使用登记</h1>
-        <p>请选择要查看的房间</p>
+        
     </div>
 
     <div class="room-grid">
@@ -56,7 +56,7 @@
         </div>
         <div class="room-card" onclick="location.href='room602.html'">
             <div class="room-number">602室</div>
-            <div class="room-status">6张床位</div>
+            <div class="room-status" id="room602-status">6张床位</div>
         </div>
         <div class="room-card" onclick="location.href='room603.html'">
             <div class="room-number">603室</div>
@@ -79,9 +79,41 @@
 
     <div class="footer">
         <div class="instructions">
-            <p>请填写使用意见<input type="text" id="advise" min="0" style="width:1000px" style="height: =80px"></p>
-            <p>系统版本: 1.0.0 | 最后更新: 2025-08-03</p>
+            <p>请填写使用意见<input type="text" id="advise" min="0" style="width:1000px" style="height: 180px"></p>
+           
         </div>
     </div>
+
+    <script>
+        // 更新房间床位信息
+        function updateRoomBedInfo() {
+            // 更新602室信息
+            const room602Info = JSON.parse(localStorage.getItem('room602Info') || '{}');
+            const room602Status = document.getElementById('room602-status');
+            if (room602Status && room602Info.totalBeds) {
+                const originalText = `${room602Info.totalBeds}张床位`;
+                const additionalText = room602Info.additionalBeds > 0 ? 
+                    ` (原有${room602Info.originalBeds}张 + 加床${room602Info.additionalBeds}张)` : '';
+                room602Status.innerHTML = originalText + additionalText;
+                
+                // 如果有加床，显示特殊样式
+                if (room602Info.additionalBeds > 0) {
+                    room602Status.style.color = '#52c41a';
+                    room602Status.style.fontWeight = 'bold';
+                }
+            }
+            
+            // 可以为其他房间添加类似逻辑
+        }
+        
+        // 页面加载时更新信息
+        document.addEventListener('DOMContentLoaded', updateRoomBedInfo);
+        
+        // 定时更新信息
+        setInterval(updateRoomBedInfo, 5000); // 每5秒更新一次
+        
+        // 监听存储变化
+        window.addEventListener('storage', updateRoomBedInfo);
+    </script>
 </body>
 </html>

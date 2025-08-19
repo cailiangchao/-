@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>602室床位分布图 - 测试版</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .room-container {
+            width: 500px;
+            height: 400px;
+            background-color: white;
+            border: 2px solid #333;
+            position: relative;
+            margin: 20px auto;
+        }
+        
+        .room-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #333;
+        }
+        
+        .bed {
+            position: absolute;
+            border: 2px solid #333;
+            background-color: #fff;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .bed:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .bed-label {
+            font-size: 8px;
+            font-weight: bold;
+            text-align: center;
+            padding: 2px;
+            background-color: #e0e0e0;
+        }
+        
+        .patient-area {
+            font-size: 10px;
+            text-align: center;
+            min-height: 12px;
+            background-color: #f8f8f8;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+        }
+        
+        .bed.empty {
+            background-color: #e6f7ff;
+            border-color: #1890ff;
+        }
+
+        .bed.occupied {
+            background-color: #fff2e8;
+            border-color: #fa8c16;
+        }
+
+        .bed.discharge_planned {
+            background-color: #f6ffed;
+            border-color: #52c41a;
+        }
+
+        /* 加床样式 */
+        .bed.additional {
+            border: 2px dashed #52c41a !important;
+            background-color: #f6ffed;
+            box-shadow: 0 2px 8px rgba(82, 196, 26, 0.3);
+        }
+
+        .bed.additional .bed-label {
+            background-color: #52c41a;
+            color: white;
+        }
+
+        /* 加床按钮样式 */
+        .add-bed-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px 15px;
+            background-color: #52c41a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .add-bed-button:hover {
+            background-color: #73d13d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(82, 196, 26, 0.3);
+        }
+
+        /* 模式指示器 */
+        #mode-indicator {
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: #1890ff;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            display: none;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* 床位统计信息 */
+        #bed-statistics {
+            text-align: center;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f2f5;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* 容器拖拽状态 */
+        .room-container.adding-mode {
+            cursor: crosshair;
+            box-shadow: 0 0 15px rgba(82, 196, 26, 0.5);
+            border: 2px dashed #52c41a;
+        }
+    </style>
+</head>
+<body>
+    <div class="room-title">
+        <span id="current-date"></span>602室床位分布图（测试版 - 加床功能演示）
+        <div id="bed-statistics">正在加载床位信息...</div>
+    </div>
+    
+    <div style="position: relative;">
+        <div class="room-container" id="room602-container">
+            <!-- 床位将通过JavaScript动态生成 -->
+        </div>
+        <button class="add-bed-button" id="add-bed-btn">+ 加床</button>
+        <div id="mode-indicator">点击选择加床位置</div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 20px;">
+        <button onclick="clearAllData()" style="padding: 8px 15px; background-color: #ff7875; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 0 5px;">清空所有数据</button>
+        <button onclick="showDebugInfo()" style="padding: 8px 15px; background-color: #40a9ff; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 0 5px;">显示调试信息</button>
+    </div>
+    
+    <script>
+        // 设置当前日期
+        const now = new Date();
+        document.getElementById('current-date').textContent = 
+            `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+            
+        // 简化的床位配置
+        const room602Config = {
+            canvasSize: { width: 500, height: 400 },
+            beds: [
+                { id: "602-01", position: { x: 50, y: 50 }, rotation: 0, hasOxygen: false },
+                { id: "602-02", position: { x: 150, y: 50 }, rotation: 0, hasOxygen: true },
+                { id: "602-03", position: { x: 250, y: 50 }, rotation: 0, hasOxygen: true },
+                { id: "602-04", position: { x: 350, y: 50 }, rotation: 0, hasOxygen: false },
+                { id: "602-05", position: { x: 50, y: 200 }, rotation: 0, hasOxygen: true },
+                { id: "602-06", position: { x: 150, y: 200 }, rotation: 0, hasOxygen: true },
+            ]
+        };
+
+        // 简化的床位管理器
+        class SimpleBedManager {
+            constructor() {
+                this.bedData = {};
+                this.additionalBeds = [];
+                this.isAddingBed = false;
+                this.init();
+            }
+            
+            init() {
+                console.log('初始化床位管理器...');
+                this.loadData();
+                this.setupUI();
+                this.render();
+            }
+            
+            loadData() {
+                const savedBedData = localStorage.getItem('room602BedData');
+                if (savedBedData) {
+                    try {
+                        this.bedData = JSON.parse(savedBedData);
+                        console.log('加载保存的床位数据:', this.bedData);
+                    } catch (error) {
+                        console.error('解析床位数据失败:', error);
+                        this.initBedData();
+                    }
+                } else {
+                    this.initBedData();
+                }
+                
+                const savedAdditionalBeds = localStorage.getItem('room602AdditionalBeds');
+                if (savedAdditionalBeds) {
+                    try {
+                        this.additionalBeds = JSON.parse(savedAdditionalBeds);
+                        console.log('加载保存的加床数据:', this.additionalBeds);
+                    } catch (error) {
+                        console.error('解析加床数据失败:', error);
+                        this.additionalBeds = [];
+                    }
+                }
+                
+                // 确保加床数据也有对应的床位数据
+                this.additionalBeds.forEach(bed => {
+                    if (!this.bedData[bed.id]) {
+                        this.bedData[bed.id] = {
+                            patientName: '',
+                            status: 'empty',
+                            remarks: ''
+                        };
+                    }
+                });
+            }
+            
+            initBedData() {
+                console.log('初始化床位数据...');
+                room602Config.beds.forEach(bed => {
+                    this.bedData[bed.id] = {
+                        patientName: '',
+                        status: 'empty',
+                        remarks: ''
+                    };
+                });
+            }
+            
+            saveData() {
+                localStorage.setItem('room602BedData', JSON.stringify(this.bedData));
+                localStorage.setItem('room602AdditionalBeds', JSON.stringify(this.additionalBeds));
+                console.log('数据已保存');
+            }
+            
+            setupUI() {
+                const addBedBtn = document.getElementById('add-bed-btn');
+                addBedBtn.addEventListener('click', () => {
+                    if (this.isAddingBed) {
+                        this.cancelAddingBed();
+                    } else {
+                        this.startAddingBed();
+                    }
+                });
+                
+                const container = document.getElementById('room602-container');
+                container.addEventListener('click', (e) => this.handleContainerClick(e));
+            }
+            
+            startAddingBed() {
+                console.log('开始加床模式...');
+                this.isAddingBed = true;
+                const container = document.getElementById('room602-container');
+                const modeIndicator = document.getElementById('mode-indicator');
+                const addBedBtn = document.getElementById('add-bed-btn');
+                
+                modeIndicator.style.display = 'block';
+                addBedBtn.innerHTML = '取消加床';
+                addBedBtn.style.backgroundColor = '#ff4d4f';
+                container.classList.add('adding-mode');
+            }
+            
+            cancelAddingBed() {
+                console.log('取消加床模式...');
+                this.isAddingBed = false;
+                const container = document.getElementById('room602-container');
+                const modeIndicator = document.getElementById('mode-indicator');
+                const addBedBtn = document.getElementById('add-bed-btn');
+                
+                modeIndicator.style.display = 'none';
+                addBedBtn.innerHTML = '+ 加床';
+                addBedBtn.style.backgroundColor = '#52c41a';
+                container.classList.remove('adding-mode');
+            }
+            
+            handleContainerClick(e) {
+                if (!this.isAddingBed) return;
+                
+                // 阻止事件冒泡
+                e.stopPropagation();
+                
+                const container = document.getElementById('room602-container');
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                console.log('点击位置:', x, y);
+                
+                // 简单的边界检查
+                if (x < 20 || x > 460 || y < 20 || y > 360) {
+                    alert('请在房间范围内选择位置！');
+                    return;
+                }
+                
+                // 简单的冲突检查
+                if (this.checkSimpleCollision(x, y)) {
+                    alert('该位置与现有床位太近，请选择其他位置！');
+                    return;
+                }
+                
+                this.addNewBed(x, y);
+                this.cancelAddingBed();
+            }
+            
+            checkSimpleCollision(x, y) {
+                const allBeds = [...room602Config.beds, ...this.additionalBeds];
+                const minDistance = 60; // 最小距离
+                
+                for (const bed of allBeds) {
+                    const distance = Math.sqrt(
+                        Math.pow(x - (bed.position.x + 20), 2) + 
+                        Math.pow(y - (bed.position.y + 40), 2)
+                    );
+                    
+                    if (distance < minDistance) {
+                        return true; // 有冲突
+                    }
+                }
+                
+                return false; // 无冲突
+            }
+            
+            addNewBed(x, y) {
+                const newBedId = `602-ADD${this.additionalBeds.length + 1}`;
+                const newBed = {
+                    id: newBedId,
+                    position: { x: x - 20, y: y - 40 },
+                    rotation: 0,
+                    hasOxygen: false,
+                    isAdditional: true
+                };
+                
+                this.additionalBeds.push(newBed);
+                
+                this.bedData[newBedId] = {
+                    patientName: '',
+                    status: 'empty',
+                    remarks: ''
+                };
+                
+                this.saveData();
+                this.render();
+                
+                console.log('成功添加加床:', newBedId, '位置:', newBed.position);
+                alert(`成功添加加床: ${newBedId}\\n位置: (${Math.round(newBed.position.x)}, ${Math.round(newBed.position.y)})`);
+            }
+            
+            deleteBed(bedId) {
+                const bedIndex = this.additionalBeds.findIndex(bed => bed.id === bedId);
+                if (bedIndex === -1) {
+                    alert('只能删除加床，不能删除原有床位！');
+                    return;
+                }
+                
+                if (confirm(`确定删除床位 ${bedId} 吗？`)) {
+                    this.additionalBeds.splice(bedIndex, 1);
+                    delete this.bedData[bedId];
+                    this.saveData();
+                    this.render();
+                    console.log('删除加床:', bedId);
+                }
+            }
+            
+            render() {
+                const container = document.getElementById('room602-container');
+                container.innerHTML = '';
+                
+                const allBeds = [...room602Config.beds, ...this.additionalBeds];
+                console.log('渲染床位:', allBeds.length, '个');
+                
+                allBeds.forEach(bed => {
+                    const bedEl = document.createElement('div');
+                    bedEl.className = `bed ${bed.isAdditional ? 'additional' : ''}`;
+                    bedEl.id = `bed-${bed.id}`;
+                    bedEl.style.left = `${bed.position.x}px`;
+                    bedEl.style.top = `${bed.position.y}px`;
+                    bedEl.style.width = '40px';
+                    bedEl.style.height = '80px';
+                    
+                    const bedData = this.bedData[bed.id] || {};
+                    const hasPatient = bedData.patientName && bedData.patientName.trim() !== '';
+                    const currentStatus = hasPatient ? 'occupied' : 'empty';
+                    
+                    bedEl.classList.add(currentStatus);
+                    
+                    bedEl.innerHTML = `
+                        <div class="bed-label">${bed.id}${bed.isAdditional ? ' (加床)' : ''}</div>
+                        <div class="patient-area">${hasPatient ? bedData.patientName : ''}</div>
+                    `;
+                    
+                    bedEl.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.openBedModal(bed.id);
+                    });
+                    
+                    // 如果是加床，添加双击删除功能
+                    if (bed.isAdditional) {
+                        bedEl.addEventListener('dblclick', (e) => {
+                            e.stopPropagation();
+                            this.deleteBed(bed.id);
+                        });
+                    }
+                    
+                    container.appendChild(bedEl);
+                });
+                
+                this.updateStatistics();
+            }
+            
+            updateStatistics() {
+                const totalBeds = room602Config.beds.length + this.additionalBeds.length;
+                const originalBeds = room602Config.beds.length;
+                const additionalBeds = this.additionalBeds.length;
+                
+                let occupiedCount = 0;
+                Object.values(this.bedData).forEach(bed => {
+                    if (bed.patientName && bed.patientName.trim() !== '') {
+                        occupiedCount++;
+                    }
+                });
+                
+                const emptyCount = totalBeds - occupiedCount;
+                
+                const statisticsEl = document.getElementById('bed-statistics');
+                statisticsEl.innerHTML = `
+                    总床位: <strong>${totalBeds}</strong>张 (原有: ${originalBeds}张${additionalBeds > 0 ? `, 加床: <span style="color: #52c41a;">${additionalBeds}</span>张` : ''}) | 
+                    使用中: <strong style="color: #fa8c16;">${occupiedCount}</strong>张 | 
+                    空床: <strong style="color: #1890ff;">${emptyCount}</strong>张
+                `;
+            }
+            
+            openBedModal(bedId) {
+                const currentName = this.bedData[bedId]?.patientName || '';
+                const isAdditional = this.additionalBeds.some(bed => bed.id === bedId);
+                
+                let message = `请输入床位 ${bedId} 的患者床号:`;
+                if (isAdditional) {
+                    message += '\\n(这是加床，双击可删除)';
+                }
+                
+                const patientName = prompt(message, currentName);
+                
+                if (patientName !== null) {
+                    this.bedData[bedId] = {
+                        patientName: patientName,
+                        status: patientName.trim() ? 'occupied' : 'empty',
+                        remarks: ''
+                    };
+                    
+                    this.saveData();
+                    this.render();
+                }
+            }
+            
+            getAllBeds() {
+                return [...room602Config.beds, ...this.additionalBeds];
+            }
+            
+            clearAllData() {
+                if (confirm('确定要清空所有数据吗？这将删除所有加床和患者信息！')) {
+                    localStorage.removeItem('room602BedData');
+                    localStorage.removeItem('room602AdditionalBeds');
+                    this.bedData = {};
+                    this.additionalBeds = [];
+                    this.initBedData();
+                    this.render();
+                    console.log('所有数据已清空');
+                }
+            }
+            
+            getDebugInfo() {
+                return {
+                    totalBeds: room602Config.beds.length + this.additionalBeds.length,
+                    originalBeds: room602Config.beds.length,
+                    additionalBeds: this.additionalBeds.length,
+                    bedData: this.bedData,
+                    additionalBedsData: this.additionalBeds,
+                    isAddingBed: this.isAddingBed
+                };
+            }
+        }
+        
+        // 初始化管理器
+        let bedManager;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成，初始化床位管理器...');
+            bedManager = new SimpleBedManager();
+        });
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && bedManager && bedManager.isAddingBed) {
+                bedManager.cancelAddingBed();
+            }
+        });
+        
+        // 全局工具函数
+        function clearAllData() {
+            if (bedManager) {
+                bedManager.clearAllData();
+            }
+        }
+        
+        function showDebugInfo() {
+            if (bedManager) {
+                const debugInfo = bedManager.getDebugInfo();
+                console.log('调试信息:', debugInfo);
+                alert('调试信息已输出到控制台，请按F12查看');
+            }
+        }
+    </script>
+</body>
+</html>

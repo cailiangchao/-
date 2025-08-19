@@ -59,7 +59,7 @@
         }
         
         .patient-area {
-            font-size: 8px; /* 调整字体大小 */
+            font-size: 15px; /* 调整字体大小 */
             text-align: center;
             min-height: 15px; /* 调整最小高度 */
             background-color: #f8f8f8;
@@ -296,6 +296,22 @@
             font-weight: bold;
             background-color: #e6f7ff;
         }
+
+        /* 床位状态样式 */
+        .bed.empty {
+            background-color: #e6f7ff;
+            border-color: #1890ff;
+        }
+
+        .bed.occupied {
+            background-color: #fff2e8;
+            border-color: #fa8c16;
+        }
+
+        .bed.discharge_planned {
+            background-color: #f6ffed;
+            border-color: #52c41a;
+        }
     </style>
 </head>
 <body>
@@ -311,8 +327,8 @@
     
     <div class="room-title">
         <span id="current-date"></span>606室床位分布图, 
-        病人总数<input type="number" id="patient-count" min="0" style="width:40px; height: 25px; padding: 2px; box-sizing: border-box;">人,
-        预出院<input type="number" id="discharge-count" min="0" style="width:40px; height: 25px; padding: 2px; box-sizing: border-box;">人
+        病人总数<input type="number" id="patient-count" min="0" style="width:40px; height: 35px; padding: 2px; box-sizing: border-box;">人,
+        预出院<input type="number" id="discharge-count" min="0" style="width:40px; height: 35px; padding: 2px; box-sizing: border-box;">人
     </div>
     <script>
         // Set current date
@@ -341,11 +357,14 @@
         <!-- 606室布局将通过JavaScript生成 -->
     </div>
     
+    
+
     <div class="signature-box" style="text-align: center; margin: 20px 0;">
         <div style="margin-bottom: 10px;">
-            护士签名: <input type="text" id="nurse-signature" style="width: 200px; text-align: center;">
-            <button id="pdf-export-btn" style="margin-left: 20px; padding: 8px 15px; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;">提交</button>
+            护士签名: <input type="text" id="nurse-signature" style="width: 200px;  height: 35px;text-align: center;">
         </div>
+        <button id="load-last-btn" style="margin-right: 20px; padding: 8px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">加载上次</button>
+        <button id="pdf-export-btn" style="padding: 8px 15px; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;">提交</button>
     </div>
     <script>
         // Load saved signature
@@ -360,13 +379,27 @@
             localStorage.setItem('signatureData', JSON.stringify(signatureData));
         });
         
+        // 加载上次保存的数据
+        document.getElementById('load-last-btn').addEventListener('click', function() {
+            const savedData = localStorage.getItem('room606BedData');
+            if (savedData) {
+                room606BedData = JSON.parse(savedData);
+                renderRoom606();
+                alert('已加载上次保存的床位数据');
+            } else {
+                alert('没有找到上次保存的数据');
+            }
+        });
+
         // 绑定PDF导出按钮事件
         document.addEventListener('DOMContentLoaded', function() {
             bindPDFExportButton('606');
         });
     </script>
 
+    <script src="bed-manager.js"></script>
     <script src="room606.js"></script>
+    <script src="room606-enhanced.js"></script>
     <script>
         // 页面加载完成后渲染布局
         document.addEventListener('DOMContentLoaded', function() {
@@ -381,5 +414,33 @@
             window.openExistingBedModal = openBedModal;
         });
     </script>
+
+    <!-- 床位编辑模态框 -->
+    <div id="bed-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 100;">
+        <div class="modal-content" style="background-color: white; margin: 15% auto; padding: 20px; width: 300px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+            <h3>床位信息 - <span id="modal-bed-id"></span></h3>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="patient-name">患者床号:</label>
+                <input type="text" id="patient-name" placeholder="输入患者床号" style="width: 100%; padding: 10px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="bed-status">床位状态:</label>
+                <select id="bed-status" style="width: 100%; padding: 10px;">
+                    <option value="empty">空床</option>
+                    <option value="occupied">占用</option>
+                    <option value="discharge_planned">拟出院</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="bed-remarks">备注:</label>
+                <textarea id="bed-remarks" rows="3" style="width: 100%; padding: 5px;"></textarea>
+            </div>
+            <div class="modal-buttons" style="text-align: right;">
+                <button id="clear-btn" style="margin-right: 5px; padding: 5px 10px;">清空</button>
+                <button id="cancel-btn" style="margin-right: 5px; padding: 5px 10px;">取消</button>
+                <button id="confirm-btn" style="padding: 5px 10px; background-color: #007acc; color: white; border: none; border-radius: 3px;">确认</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -16,8 +16,7 @@ const room602Config = {
         { type: "warehouse", label: "库房", position: { x: 375, y: 315 }, width: 125, height: 85 },
         { type: "computer", label: "电脑", position: { x: 360, y: 350 } },
         { type: "induction_door", label: "感应门", position: { x: 210, y: 360 }, width: 60, height: 40 },
-        { type: "induction_door", label: "感应门", position: { x: 300, y: 370 }, width: 60, height: 40 },
-        { type: "induction_door", label: "门", position: { x: 0, y: 100 }, width: 60, height: 40 },
+                { type: "induction_door", label: "门", position: { x: 0, y: 100 }, width: 60, height: 40 },
         { type: "warehouse", label: "室外", position: { x: 0, y: 0 }, width: 255, height: 150 },
         { type: "washbasin", label: "洗手池", position: { x: 0, y: 370 } }
     ],
@@ -166,13 +165,29 @@ function renderRoom602() {
             bedEl.style.transform = 'rotate(0deg)';
         }
         
-        // 添加床位状态类
-        bedEl.classList.add(`bed-${room602BedData[bed.id].status}`);
-        
         // 床位内容
+        const bedData = room602BedData[bed.id] || {};
+        const hasPatient = bedData.patientName && bedData.patientName.trim() !== '';
+        
+        // 修复：使用保存的状态，而不是重新判断
+        let currentStatus = bedData.status || 'empty';
+
+        // 只有在数据不一致时才进行自动纠正
+        if (hasPatient && currentStatus === 'empty') {
+            // 有患者但状态是空床，自动纠正为占用
+            currentStatus = 'occupied';
+            room602BedData[bed.id].status = 'occupied';  // 同步更新数据
+        } else if (!hasPatient && (currentStatus === 'occupied' || currentStatus === 'discharge_planned')) {
+            // 没有患者但状态不是空床，自动纠正为空床
+            currentStatus = 'empty';
+            room602BedData[bed.id].status = 'empty';  // 同步更新数据
+        }
+
+        bedEl.classList.add(currentStatus);
+
         bedEl.innerHTML = `
             <div class="bed-label">${bed.id}</div>
-            <div class="patient-area">${room602BedData[bed.id].patientName}</div>
+            <div class="patient-area">${hasPatient ? bedData.patientName : ''}</div>
         `;
         
         // 点击事件
@@ -182,102 +197,132 @@ function renderRoom602() {
     });
 }
 
-// 创建床位编辑模态框
-function createBedModal() {
-    const modal = document.createElement('div');
-    modal.id = 'bed-modal';
-    modal.className = 'modal';
+// 保留空行以保持代码结构
+
+// 床位点击处理 - 直接输入模式，自动变更状态
+function handleBedClick(bedId) {
+    const bedEl = document.getElementById(`bed-${bedId}`);
+    const patientArea = bedEl.querySelector('.patient-area');
     
-    modal.innerHTML = `
-        <div class="modal-content">
-            <h3>床位信息 - <span id="modal-bed-id"></span></h3>
-            <div class="form-group">
-                <label for="patient-name">患者床号:</label>
-                <input type="text" id="patient-name" placeholder="输入患者床号">
-            </div>
-            <div class="form-group">
-                <label for="bed-status">床位状态:</label>
-                <select id="bed-status">
-                    <option value="empty">空床</option>
-                    <option value="occupied">占用</option>
-                    <option value="discharge_planned">拟出院</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="bed-remarks">备注:</label>
-                <textarea id="bed-remarks" rows="3"></textarea>
-            </div>
-            <div class="modal-buttons">
-                <button id="clear-btn">清空</button>
-                <button id="cancel-btn">取消</button>
-                <button id="confirm-btn">确认</button>
-            </div>
-        </div>
-    `;
+    // 创建输入框
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = room602BedData[bedId]?.patientName || '';
+    input.style.width = '100%';
+    input.style.height = '100%';
+    input.style.border = 'none';
+    input.style.outline = 'none';
+    input.style.backgroundColor = 'transparent';
+    input.style.textAlign = 'center';
+    input.style.fontSize = '10px';
+    input.placeholder = '输入床号';
     
-    document.body.appendChild(modal);
-    return modal;
+    // 替换患者区域为输入框
+    patientArea.innerHTML = '';
+    patientArea.appendChild(input);
+    input.focus();
+    input.select();
+    
+    // 保存处理 - 自动变更状态
+    const handleSave = () => {
+        const patientName = input.value.trim();
+        
+        // 自动确定状态：有患者名称就是占用，没有就是空床
+        const status = patientName ? 'occupied' : 'empty';
+        
+        room602BedData[bedId] = {
+            patientName: patientName,
+            status: status,
+            remarks: room602BedData[bedId]?.remarks || ''
+        };
+        
+        // 保存并重新渲染
+        localStorage.setItem('room602BedData', JSON.stringify(room602BedData));
+        renderRoom602();
+    };
+    
+    // 回车保存
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSave();
+        }
+        if (e.key === 'Escape') {
+            renderRoom602(); // 取消编辑
+        }
+    });
+    
+    // 失去焦点保存
+    input.addEventListener('blur', handleSave);
 }
 
-// 床位编辑模态框功能
-function openBedModal(bedId) {
-    let modal = document.getElementById('bed-modal');
-    if (!modal) {
-        modal = createBedModal();
+// 保留空行以保持代码结构
+
+// 数据验证函数
+function validateBedData(bedId) {
+    const bedData = room602BedData[bedId];
+    if (!bedData) return false;
+    
+    const hasPatient = bedData.patientName && bedData.patientName.trim() !== '';
+    const status = bedData.status;
+    
+    // 检查数据一致性
+    if (hasPatient && status === 'empty') {
+        console.warn(`床位 ${bedId} 数据不一致：有患者但状态为空床`);
+        return false;
     }
     
-    document.getElementById('modal-bed-id').textContent = bedId;
+    if (!hasPatient && status !== 'empty') {
+        console.warn(`床位 ${bedId} 数据不一致：无患者但状态非空床`);
+        return false;
+    }
     
-    // 填充现有数据
-    const bed = room602BedData[bedId] || { patientName: '', status: 'empty', remarks: '' };
-    document.getElementById('patient-name').value = bed.patientName || '';
-    document.getElementById('bed-status').value = bed.status || 'empty';
-    document.getElementById('bed-remarks').value = bed.remarks || '';
-    
-    modal.style.display = 'block';
-    
-    // 绑定按钮事件
-    document.getElementById('confirm-btn').onclick = saveBedData;
-    document.getElementById('cancel-btn').onclick = closeModal;
-    document.getElementById('clear-btn').onclick = clearBedData;
+    return true;
 }
 
-// 保存床位数据
-function saveBedData() {
-    const bedId = document.getElementById('modal-bed-id').textContent;
-    room602BedData[bedId] = {
-        patientName: document.getElementById('patient-name').value,
-        status: document.getElementById('bed-status').value,
-        remarks: document.getElementById('bed-remarks').value
-    };
+// 定期数据同步
+function syncAllBedData() {
+    let hasChanges = false;
     
-    // 保存数据到本地存储
-    localStorage.setItem('room602BedData', JSON.stringify(room602BedData));
+    Object.keys(room602BedData).forEach(bedId => {
+        const bedData = room602BedData[bedId];
+        const hasPatient = bedData.patientName && bedData.patientName.trim() !== '';
+        
+        if (hasPatient && bedData.status === 'empty') {
+            room602BedData[bedId].status = 'occupied';
+            hasChanges = true;
+        } else if (!hasPatient && bedData.status !== 'empty') {
+            room602BedData[bedId].status = 'empty';
+            hasChanges = true;
+        }
+    });
     
-    closeModal();
-    renderRoom602(); // 重新渲染以更新显示
-}
-
-// 关闭模态框
-function closeModal() {
-    document.getElementById('bed-modal').style.display = 'none';
-}
-
-// 清空床位数据
-function clearBedData() {
-    const bedId = document.getElementById('modal-bed-id').textContent;
-    room602BedData[bedId] = {
-        patientName: '',
-        status: 'empty',
-        remarks: ''
-    };
-    
-    // 保存数据到本地存储
-    localStorage.setItem('room602BedData', JSON.stringify(room602BedData));
-    
-    closeModal();
-    renderRoom602(); // 重新渲染以更新显示
+    if (hasChanges) {
+        localStorage.setItem('room602BedData', JSON.stringify(room602BedData));
+        renderRoom602();
+        console.log('数据已同步修复');
+    }
 }
 
 // 初始化
 initRoom602BedData();
+
+// 页面加载完成后同步数据
+document.addEventListener('DOMContentLoaded', function() {
+    // 加载保存的数据
+    const savedData = localStorage.getItem('room602BedData');
+    if (savedData) {
+        try {
+            room602BedData = JSON.parse(savedData);
+        } catch (error) {
+            console.error('解析保存数据失败:', error);
+            initRoom602BedData();
+        }
+    }
+    
+    // 同步数据一致性
+    syncAllBedData();
+    
+    // 渲染页面
+    renderRoom602();
+});

@@ -14,6 +14,29 @@
     box-sizing: border-box;
 }
 
+/* 床位状态颜色 */
+.bed-empty {
+    background-color: #e8f5e9; /* 浅绿色 - 空床 */
+}
+
+.bed-occupied {
+    background-color: #ffebee; /* 浅红色 - 占用 */
+}
+
+.bed-discharge_planned {
+    background-color: #fff8e1; /* 浅黄色 - 拟出院 */
+}
+
+/* 患者信息显示区域 */
+.patient-area {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    padding: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* 隔离病房样式 */
 .bed.isolation-ward {
     background-color: #fff8e1; /* 浅黄色背景 */
@@ -36,6 +59,31 @@
 #mechanical {
     background-color: rgba(211, 211, 211, 0.3);
     border-color: #888;
+}
+
+/* 状态图例样式 */
+.status-legend {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.status-legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.status-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    border: 1px solid #333;
 }
 
 /* 床位编辑模态框样式 */
@@ -115,3 +163,31 @@
     background-color: #d3d3d3;
     height: 160px; /* 纹理墙体的高度 */
 }
+/* 床位状态样式 */
+.bed.empty {
+    background-color: #e6f7ff;
+    border-color: #1890ff;
+}
+
+.bed.occupied {
+    background-color: #fff2e8;
+    border-color: #fa8c16;
+}
+
+.bed.discharge_planned {
+    background-color: #f6ffed;
+    border-color: #52c41a;
+}
+
+/* 状态图标样式 */
+.bed-status-icon {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 8px;
+    font-weight: bold;
+}
+
+.bed.empty .bed-status-icon { color: #1890ff; }
+.bed.occupied .bed-status-icon { color: #fa8c16; }
+.bed.discharge_planned .bed-status-icon { color: #52c41a; }
