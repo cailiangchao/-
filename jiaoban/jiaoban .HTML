@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新生儿科病房护理交班志</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.5;
+        }
+        
+        .container {
+            margin: 0 auto;
+            padding: 20px 2%;
+            background: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-bottom: 2px solid #e5e5e5;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .controls .form-group {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .controls .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary { background: #1976d2; color: white; }
+        .btn-primary:hover { background: #1565c0; }
+        .btn-secondary { background: #616161; color: white; }
+        .btn-secondary:hover { background: #424242; }
+        .btn-danger { background: #d32f2f; color: white; }
+        .btn-danger:hover { background: #c62828; }
+        .btn-info { background: #0288d1; color: white; }
+        .btn-info:hover { background: #0277bd; }
+        .btn-warning { background: #f57c00; color: white; }
+        .btn-warning:hover { background: #ef6c00; }
+        
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 0;
+            color: #333;
+        }
+        
+        .form-group input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .shifts-container {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 30px;
+            border: 2px solid #333;
+        }
+        
+        .shift-column {
+            flex: 1;
+        }
+
+        .shift-column + .shift-column {
+            border-left: 1px solid #333;
+        }
+        
+        .shift-header {
+            background: #e3f2fd;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 1px solid #333;
+        }
+        
+        .shift-content {
+            padding: 15px;
+        }
+        
+        .shift-section {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .shift-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .shift-grid-rooms {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .shift-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .shift-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .field-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .field-group label {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        
+        .field-group input {
+            padding: 4px;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            font-size: 12px;
+        }
+        
+        .special-care-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .special-care-item label {
+            font-size: 11px;
+            color: #666;
+            flex-shrink: 0;
+            margin-right: 5px;
+        }
+        
+        .special-care-item input {
+            width: 100%;
+            padding: 2px 4px;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        .special-care-group {
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .group-label {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 8px;
+            display: block;
+            color: #333;
+        }
+        
+        .patients-section {
+            border: 2px solid #333;
+            margin-bottom: 30px;
+        }
+        
+        .patients-header {
+            background: #f5f5f5;
+            padding: 15px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .patients-header h3 {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .patients-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .patients-table th,
+        .patients-table td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        
+        .patients-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .patients-table input,
+        .patients-table textarea {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            padding: 4px;
+            font-size: 12px;
+        }
+        
+        .patients-table textarea {
+            resize: vertical;
+            min-height: 40px;
+        }
+        
+        .empty-patients {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .stats-panel {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .stat-value.blue { color: #1976d2; }
+        .stat-value.green { color: #388e3c; }
+        .stat-value.orange { color: #f57c00; }
+        .stat-value.purple { color: #7b1fa2; }
+        .stat-value.indigo { color: #303f9f; }
+        .stat-value.red { color: #d32f2f; }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media print {
+            .no-print { display: none !important; }
+            .container { padding: 10px; }
+            .shifts-container { font-size: 11px; }
+            .shift-content { padding: 8px; }
+            body { background: white; }
+            @page { margin: 1cm; size: A4 landscape; }
+        }
+        
+        @media (max-width: 768px) {
+            .shifts-container {
+                flex-direction: column;
+            }
+            .shift-column {
+                border-right: none;
+                border-bottom: 1px solid #333;
+            }
+            .shift-column:last-child {
+                border-bottom: none;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>新生儿科病房护理交班志</h1>
+        </div>
+        
+        <div class="controls no-print">
+            <div class="form-group">
+                <label>日期:</label>
+                <input type="date" id="date">
+            </div>
+            <div class="buttons">
+                <button class="btn btn-primary" onclick="toggleStats()">📊 统计</button>
+                <button class="btn btn-secondary" onclick="printData()">🖨️ 打印</button>
+                <button class="btn btn-info" onclick="saveData()">💾 保存本地</button>
+                <button class="btn btn-warning" onclick="loadData()">📂 加载本地</button>
+                <button class="btn btn-danger" onclick="clearData()">🗑️ 清空重置</button>
+            </div>
+        </div>
+        
+        <div id="statsPanel" class="stats-panel no-print hidden">
+            <h3 style="margin-bottom: 15px;">今日统计</h3>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-label">总入院</div><div class="stat-value blue" id="statAdmissions">0</div></div>
+                <div class="stat-card"><div class="stat-label">总出院</div><div class="stat-value green" id="statDischarges">0</div></div>
+                <div class="stat-card"><div class="stat-label">总转科</div><div class="stat-value orange" id="statTransfers">0</div></div>
+                <div class="stat-card"><div class="stat-label">总手术</div><div class="stat-value purple" id="statSurgeries">0</div></div>
+                <div class="stat-card"><div class="stat-label">平均患者数</div><div class="stat-value indigo" id="statAvgPatients">0</div></div>
+                <div class="stat-card"><div class="stat-label">死亡病例</div><div class="stat-value red" id="statDeaths">0</div></div>
+            </div>
+        </div>
+        
+        <div class="shifts-container">
+            <!-- Day Shift -->
+            <div class="shift-column">
+                <div class="shift-header">日班</div>
+                <div class="shift-content">
+                    <div class="shift-section">
+                        <div class="shift-grid-rooms">
+                            <div class="field-group"><label>601:</label><input type="number" id="day_room_601" min="0"></div>
+                            <div class="field-group"><label>602:</label><input type="number" id="day_room_602" min="0"></div>
+                            <div class="field-group"><label>603:</label><input type="number" id="day_room_603" min="0"></div>
+                            <div class="field-group"><label>605:</label><input type="number" id="day_room_605" min="0"></div>
+                            <div class="field-group"><label>负压病房:</label><input type="number" id="day_room_neg_pressure" min="0"></div>
+                            <div class="field-group"><label>606:</label><input type="number" id="day_room_606" min="0"></div>
+                            <div class="field-group"><label>607:</label><input type="number" id="day_room_607" min="0"></div>
+                        </div>
+                    </div>
+                    <div class="shift-section">
+                        <div class="shift-grid">
+                            <div class="field-group"><label>患者总数:</label><input type="number" id="day_totalPatients" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>请假外出:</label><input type="number" id="day_onLeave" min="0"></div>
+                            <div class="field-group"><label>特、一级护理数:</label><input type="number" id="day_specialCare" min="0"></div>
+                            <div class="field-group"><label>出车未回:</label><input type="number" id="day_outOnCall" min="0"></div>
+                        </div>
+                    </div>
+                    <div class="shift-section">
+                        <div class="shift-grid-3">
+                            <div class="field-group"><label>入院:</label><input type="number" id="day_admissions" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>出院:</label><input type="number" id="day_discharges" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>死亡:</label><input type="number" id="day_deaths" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>转入:</label><input type="number" id="day_transfers_in" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>转出:</label><input type="number" id="day_transfers_out" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>手术:</label><input type="number" id="day_surgeries" min="0" onchange="updateStats()"></div>
+                        </div>
+                    </div>
+                    <div class="shift-section">
+                        <div class="special-care-group">
+                            <label class="group-label">上呼吸机患者:</label>
+                            <div class="special-care-item"><label>气管插管:</label><input type="text" id="day_ventilator_intubation"></div>
+                            <div class="special-care-item"><label>NIPPV:</label><input type="text" id="day_ventilator_nippv"></div>
+                            <div class="special-care-item"><label>CPAP:</label><input type="text" id="day_ventilator_cpap"></div>
+                        </div>
+                        
+                        <div class="special-care-group">
+                            <label class="group-label">中心静脉置管患者:</label>
+                            <div class="special-care-item"><label>PICC:</label><input type="text" id="day_centralVenous_picc"></div>
+                            <div class="special-care-item"><label>UVC:</label><input type="text" id="day_centralVenous_uvc"></div>
+                            <div class="special-care-item"><label>CVC:</label><input type="text" id="day_centralVenous_cvc"></div>
+                        </div>
+                        <div class="special-care-group">
+                            <label class="group-label">留置引流管患者:</label>
+                            <div class="special-care-item"><label>尿管:</label><input type="text" id="day_drainage_urinary"></div>
+                            <div class="special-care-item"><label>胸腔引流管:</label><input type="text" id="day_drainage_chest"></div>
+                            <div class="special-care-item"><label>腹腔引流管:</label><input type="text" id="day_drainage_abdominal"></div>
+                            <div class="special-care-item"><label>脑室引流管:</label><input type="text" id="day_drainage_ventricular"></div>
+                            <div class="special-care-item"><label>胃肠减压引流:</label><input type="text" id="day_drainage_gi"></div>
+                            <div class="special-care-item"><label>特殊:</label><input type="text" id="day_drainage_special"></div>
+                        </div>
+                        <div class="special-care-item"><label>有创动脉监测患者:</label><input type="text" id="day_arterialMonitor"></div>
+                        <div class="special-care-item"><label>输全血、RBC、血小板患者:</label><input type="text" id="day_bloodTransfusion"></div>
+                        <div class="special-care-item"><label>亚低温患者:</label><input type="text" id="day_hypothermia"></div>
+                        <div class="special-care-item"><label>明天手术患者:</label><input type="text" id="day_tomorrowSurgery"></div>
+                    </div>
+                    <div class="shift-section">
+                        <div class="field-group"><label>临床路径:</label><input type="text" id="day_clinicalPath"></div>
+                        <div class="field-group"><label>沟通平台:</label><input type="text" id="day_communication"></div>
+                        <div class="field-group"><label>日班交接签名:</label><input type="text" id="day_signature"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Evening Shift -->
+            <div class="shift-column">
+                <div class="shift-header">晚班</div>
+                <div class="shift-content">
+                    <div class="shift-section">
+                        <div class="shift-grid-rooms">
+                            <div class="field-group"><label>601:</label><input type="number" id="evening_room_601" min="0"></div>
+                            <div class="field-group"><label>602:</label><input type="number" id="evening_room_602" min="0"></div>
+                            <div class="field-group"><label>603:</label><input type="number" id="evening_room_603" min="0"></div>
+                            <div class="field-group"><label>605:</label><input type="number" id="evening_room_605" min="0"></div>
+                            <div class="field-group"><label>负压病房:</label><input type="number" id="evening_room_neg_pressure" min="0"></div>
+                            <div class="field-group"><label>606:</label><input type="number" id="evening_room_606" min="0"></div>
+                            <div class="field-group"><label>607:</label><input type="number" id="evening_room_607" min="0"></div>
+                        </div>
+                    </div>
+                    <div class="shift-section">
+                        <div class="shift-grid">
+                            <div class="field-group"><label>患者总数:</label><input type="number" id="evening_totalPatients" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>请假外出:</label><input type="number" id="evening_onLeave" min="0"></div>
+                            <div class="field-group"><label>特、一级护理数:</label><input type="number" id="evening_specialCare" min="0"></div>
+                            <div class="field-group"><label>出车未回:</label><input type="number" id="evening_outOnCall" min="0"></div>
+                        </div>
+                    </div>
+                    <div class="shift-section">
+                        <div class="shift-grid-3">
+                            <div class="field-group"><label>入院:</label><input type="number" id="evening_admissions" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>出院:</label><input type="number" id="evening_discharges" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>死亡:</label><input type="number" id="evening_deaths" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>转入:</label><input type="number" id="evening_transfers_in" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>转出:</label><input type="number" id="evening_transfers_out" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>手术:</label><input type="number" id="evening_surgeries" min="0" onchange="updateStats()"></div>
+                        </div>
+                    </div>
+                    <div class="shift-section">
+                        <div class="special-care-group">
+                            <label class="group-label">上呼吸机患者:</label>
+                            <div class="special-care-item"><label>气管插管:</label><input type="text" id="evening_ventilator_intubation"></div>
+                            <div class="special-care-item"><label>NIPPV:</label><input type="text" id="evening_ventilator_nippv"></div>
+                            <div class="special-care-item"><label>CPAP:</label><input type="text" id="evening_ventilator_cpap"></div>
+                        </div>
+                        <div class="special-care-group">
+                            <label class="group-label">中心静脉置管患者:</label>
+                            <div class="special-care-item"><label>PICC:</label><input type="text" id="evening_centralVenous_picc"></div>
+                            <div class="special-care-item"><label>UVC:</label><input type="text" id="evening_centralVenous_uvc"></div>
+                            <div class="special-care-item"><label>CVC:</label><input type="text" id="evening_centralVenous_cvc"></div>
+                        </div>
+                        <div class="special-care-group">
+                            <label class="group-label">留置引流管患者:</label>
+                            <div class="special-care-item"><label>尿管:</label><input type="text" id="evening_drainage_urinary"></div>
+                            <div class="special-care-item"><label>胸腔引流管:</label><input type="text" id="evening_drainage_chest"></div>
+                            <div class="special-care-item"><label>腹腔引流管:</label><input type="text" id="evening_drainage_abdominal"></div>
+                            <div class="special-care-item"><label>脑室引流管:</label><input type="text" id="evening_drainage_ventricular"></div>
+                            <div class="special-care-item"><label>胃肠减压引流:</label><input type="text" id="evening_drainage_gi"></div>
+                            <div class="special-care-item"><label>特殊:</label><input type="text" id="evening_drainage_special"></div>
+                        </div>
+                        <div class="special-care-item"><label>有创动脉监测患者:</label><input type="text" id="evening_arterialMonitor"></div>
+                        <div class="special-care-item"><label>输全血、RBC、血小板患者:</label><input type="text" id="evening_bloodTransfusion"></div>
+                        <div class="special-care-item"><label>亚低温患者:</label><input type="text" id="evening_hypothermia"></div>
+                        <div class="special-care-item"><label>明天手术患者:</label><input type="text" id="evening_tomorrowSurgery"></div>
+                    </div>
+                    <div class="shift-section">
+                        <div class="field-group"><label>临床路径:</label><input type="text" id="evening_clinicalPath"></div>
+                        <div class="field-group"><label>沟通平台:</label><input type="text" id="evening_communication"></div>
+                        <div class="field-group"><label>晚班交接签名:</label><input type="text" id="evening_signature"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Night Shift -->
+            <div class="shift-column">
+                <div class="shift-header">夜班</div>
+                <div class="shift-content">
+                    <div class="shift-section">
+                        <div class="shift-grid-rooms">
+                            <div class="field-group"><label>601:</label><input type="number" id="night_room_601" min="0"></div>
+                            <div class="field-group"><label>602:</label><input type="number" id="night_room_602" min="0"></div>
+                            <div class="field-group"><label>603:</label><input type="number" id="night_room_603" min="0"></div>
+                            <div class="field-group"><label>605:</label><input type="number" id="night_room_605" min="0"></div>
+                            <div class="field-group"><label>负压病房:</label><input type="number" id="night_room_neg_pressure" min="0"></div>
+                            <div class="field-group"><label>606:</label><input type="number" id="night_room_606" min="0"></div>
+                            <div class="field-group"><label>607:</label><input type="number" id="night_room_607" min="0"></div>
+                        </div>
+                    </div>
+                    <div class="shift-section">
+                        <div class="shift-grid">
+                            <div class="field-group"><label>患者总数:</label><input type="number" id="night_totalPatients" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>请假外出:</label><input type="number" id="night_onLeave" min="0"></div>
+                            <div class="field-group"><label>特、一级护理数:</label><input type="number" id="night_specialCare" min="0"></div>
+                            <div class="field-group"><label>出车未回:</label><input type="number" id="night_outOnCall" min="0"></div>
+                        </div>
+                    </div>
+                    <div class="shift-section">
+                        <div class="shift-grid-3">
+                            <div class="field-group"><label>入院:</label><input type="number" id="night_admissions" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>出院:</label><input type="number" id="night_discharges" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>死亡:</label><input type="number" id="night_deaths" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>转入:</label><input type="number" id="night_transfers_in" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>转出:</label><input type="number" id="night_transfers_out" min="0" onchange="updateStats()"></div>
+                            <div class="field-group"><label>手术:</label><input type="number" id="night_surgeries" min="0" onchange="updateStats()"></div>
+                        </div>
+                    </div>
+                    <div class="shift-section">
+                        <div class="special-care-group">
+                            <label class="group-label">上呼吸机患者:</label>
+                            <div class="special-care-item"><label>气管插管:</label><input type="text" id="night_ventilator_intubation"></div>
+                            <div class="special-care-item"><label>NIPPV:</label><input type="text" id="night_ventilator_nippv"></div>
+                            <div class="special-care-item"><label>CPAP:</label><input type="text" id="night_ventilator_cpap"></div>
+                        </div>
+                        <div class="special-care-group">
+                            <label class="group-label">中心静脉置管患者:</label>
+                            <div class="special-care-item"><label>PICC:</label><input type="text" id="night_centralVenous_picc"></div>
+                            <div class="special-care-item"><label>UVC:</label><input type="text" id="night_centralVenous_uvc"></div>
+                            <div class="special-care-item"><label>CVC:</label><input type="text" id="night_centralVenous_cvc"></div>
+                        </div>
+                        <div class="special-care-group">
+                            <label class="group-label">留置引流管患者:</label>
+                            <div class="special-care-item"><label>尿管:</label><input type="text" id="night_drainage_urinary"></div>
+                            <div class="special-care-item"><label>胸腔引流管:</label><input type="text" id="night_drainage_chest"></div>
+                            <div class="special-care-item"><label>腹腔引流管:</label><input type="text" id="night_drainage_abdominal"></div>
+                            <div class="special-care-item"><label>脑室引流管:</label><input type="text" id="night_drainage_ventricular"></div>
+                            <div class="special-care-item"><label>胃肠减压引流:</label><input type="text" id="night_drainage_gi"></div>
+                            <div class="special-care-item"><label>特殊:</label><input type="text" id="night_drainage_special"></div>
+                        </div>
+                        <div class="special-care-item"><label>有创动脉监测患者:</label><input type="text" id="night_arterialMonitor"></div>
+                        <div class="special-care-item"><label>输全血、RBC、血小板患者:</label><input type="text" id="night_bloodTransfusion"></div>
+                        <div class="special-care-item"><label>亚低温患者:</label><input type="text" id="night_hypothermia"></div>
+                        <div class="special-care-item"><label>明天手术患者:</label><input type="text" id="night_tomorrowSurgery"></div>
+                    </div>
+                    <div class="shift-section">
+                        <div class="field-group"><label>临床路径:</label><input type="text" id="night_clinicalPath"></div>
+                        <div class="field-group"><label>沟通平台:</label><input type="text" id="night_communication"></div>
+                        <div class="field-group"><label>夜班交接签名:</label><input type="text" id="night_signature"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="patients-section">
+            <div class="patients-header">
+                <h3>病室动态 / 护理内容</h3>
+                <button class="btn btn-primary no-print" onclick="addPatient()">➕ 添加患者</button>
+            </div>
+            <div id="patientsTable">
+                <table class="patients-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%">类别标志</th>
+                            <th style="width: 10%">床号</th>
+                            <th style="width: 15%">姓名</th>
+                            <th style="width: 25%">诊断</th>
+                            <th style="width: 30%">注意问题</th>
+                            <th style="width: 10%" class="no-print">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patientsBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('date').value = new Date().toISOString().split('T')[0];
+        
+        let patientCount = 0;
+        let patients = [];
+
+        function addPatient() {
+            patientCount++;
+            const patient = { id: patientCount, category: '', bedNumber: '', name: '', diagnosis: '', notes: '' };
+            patients.push(patient);
+            renderPatients();
+        }
+
+        function removePatient(id) {
+            patients = patients.filter(p => p.id !== id);
+            renderPatients();
+        }
+
+        function updatePatient(id, field, value) {
+            const patient = patients.find(p => p.id === id);
+            if (patient) {
+                patient[field] = value;
+            }
+        }
+
+        function renderPatients() {
+            const tbody = document.getElementById('patientsBody');
+            if (patients.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-patients">暂无患者记录，点击"添加患者"按钮添加</td></tr>';
+                return;
+            }
+            tbody.innerHTML = patients.map(patient => `
+                <tr>
+                    <td><input type="text" value="${patient.category}" onchange="updatePatient(${patient.id}, 'category', this.value)"></td>
+                    <td><input type="text" value="${patient.bedNumber}" onchange="updatePatient(${patient.id}, 'bedNumber', this.value)"></td>
+                    <td><input type="text" value="${patient.name}" onchange="updatePatient(${patient.id}, 'name', this.value)"></td>
+                    <td><input type="text" value="${patient.diagnosis}" onchange="updatePatient(${patient.id}, 'diagnosis', this.value)"></td>
+                    <td><textarea onchange="updatePatient(${patient.id}, 'notes', this.value)">${patient.notes}</textarea></td>
+                    <td class="no-print"><button class="btn btn-danger" onclick="removePatient(${patient.id})">🗑️ 删除</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function getFieldValue(id) {
+            const element = document.getElementById(id);
+            return element ? (element.type === 'number' ? parseInt(element.value) || 0 : element.value) : 0;
+        }
+
+        function updateStats() {
+            const stats = {
+                totalAdmissions: getFieldValue('day_admissions') + getFieldValue('evening_admissions') + getFieldValue('night_admissions'),
+                totalDischarges: getFieldValue('day_discharges') + getFieldValue('evening_discharges') + getFieldValue('night_discharges'),
+                totalTransfers: (getFieldValue('day_transfers_in') + getFieldValue('evening_transfers_in') + getFieldValue('night_transfers_in')) +
+                               (getFieldValue('day_transfers_out') + getFieldValue('evening_transfers_out') + getFieldValue('night_transfers_out')),
+                totalSurgeries: getFieldValue('day_surgeries') + getFieldValue('evening_surgeries') + getFieldValue('night_surgeries'),
+                averagePatients: Math.round((getFieldValue('day_totalPatients') + getFieldValue('evening_totalPatients') + getFieldValue('night_totalPatients')) / 3),
+                totalDeaths: getFieldValue('day_deaths') + getFieldValue('evening_deaths') + getFieldValue('night_deaths')
+            };
+            document.getElementById('statAdmissions').textContent = stats.totalAdmissions;
+            document.getElementById('statDischarges').textContent = stats.totalDischarges;
+            document.getElementById('statTransfers').textContent = stats.totalTransfers;
+            document.getElementById('statSurgeries').textContent = stats.totalSurgeries;
+            document.getElementById('statAvgPatients').textContent = isNaN(stats.averagePatients) ? 0 : stats.averagePatients;
+            document.getElementById('statDeaths').textContent = stats.totalDeaths;
+        }
+
+        function toggleStats() {
+            const panel = document.getElementById('statsPanel');
+            panel.classList.toggle('hidden');
+            if (!panel.classList.contains('hidden')) {
+                updateStats();
+            }
+        }
+
+        function printData() {
+            window.print();
+        }
+
+        function getFields() {
+            return [
+                'room_601', 'room_602', 'room_603', 'room_605', 'room_neg_pressure', 'room_606', 'room_607',
+                'totalPatients', 'onLeave', 'specialCare', 'outOnCall',
+                'admissions', 'discharges', 'deaths', 'transfers_in', 'transfers_out', 'surgeries',
+                'ventilator_intubation', 'ventilator_nippv', 'ventilator_cpap',
+                'arterialMonitor',
+                'centralVenous_picc', 'centralVenous_uvc', 'centralVenous_cvc',
+                'drainage_urinary', 'drainage_chest', 'drainage_abdominal', 'drainage_ventricular', 'drainage_gi', 'drainage_special',
+                'bloodTransfusion', 'hypothermia', 'tomorrowSurgery', 
+                'clinicalPath', 'communication', 'signature'
+            ];
+        }
+
+        function saveData() {
+            const shifts = ['day', 'evening', 'night'];
+            const fields = getFields();
+            const data = { date: getFieldValue('date'), shifts: {}, patients: patients };
+            shifts.forEach(shift => {
+                data.shifts[shift] = {};
+                fields.forEach(field => {
+                    data.shifts[shift][field] = getFieldValue(`${shift}_${field}`);
+                });
+            });
+            localStorage.setItem('nursingHandoverData', JSON.stringify(data));
+            alert('数据已保存到本地！');
+        }
+
+        function loadData() {
+            const savedData = localStorage.getItem('nursingHandoverData');
+            if (savedData) {
+                const shouldLoad = confirm('确定要从本地加载数据吗？这将覆盖当前所有未保存的修改。');
+                if (!shouldLoad) return;
+                const data = JSON.parse(savedData);
+                _loadDataInternal(data);
+                alert('数据加载成功！');
+            } else {
+                alert('没有找到可加载的本地数据。');
+            }
+        }
+
+        function clearData() {
+            if (confirm('确定要清空所有数据吗？此操作不可撤销。')) {
+                document.getElementById('date').value = new Date().toISOString().split('T')[0];
+                const form = document.querySelector('.container');
+                const inputs = form.querySelectorAll('input[type="text"], input[type="number"], textarea');
+                inputs.forEach(input => {
+                    if (input.id !== 'date') input.value = '';
+                });
+                patients = [];
+                patientCount = 0;
+                renderPatients();
+                updateStats();
+                alert('所有数据已清空。');
+            }
+        }
+
+        function _loadDataInternal(data) {
+            document.getElementById('date').value = data.date || new Date().toISOString().split('T')[0];
+            const shifts = ['day', 'evening', 'night'];
+            const fields = getFields();
+            shifts.forEach(shift => {
+                fields.forEach(field => {
+                    const element = document.getElementById(`${shift}_${field}`);
+                    if (element) {
+                        element.value = (data.shifts && data.shifts[shift] && data.shifts[shift][field] !== undefined) ? data.shifts[shift][field] : '';
+                    }
+                });
+            });
+            if (data.patients) {
+                patients = data.patients;
+                patientCount = patients.length > 0 ? Math.max(0, ...patients.map(p => p.id)) : 0;
+            } else {
+                patients = [];
+                patientCount = 0;
+            }
+            renderPatients();
+            updateStats();
+        }
+
+        window.addEventListener('load', function() {
+            renderPatients();
+            updateStats();
+        });
+    </script>
+</body>
+</html>
