@@ -5,6 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新生儿科病房护理交班志</title>
     <style>
+        :root {
+            --primary-color: #0d6efd;
+            --primary-hover: #0b5ed7;
+            --secondary-color: #6c757d;
+            --secondary-hover: #5c636a;
+            --success-color: #198754;
+            --success-hover: #157347;
+            --danger-color: #dc3545;
+            --danger-hover: #bb2d3b;
+            --info-color: #0dcaf0;
+            --info-hover: #31d2f2;
+            --warning-color: #ffc107;
+            --warning-hover: #ffca2c;
+            --light-gray: #f8f9fa;
+            --border-color: #dee2e6;
+            --text-color: #212529;
+            --text-muted: #6c757d;
+            --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            --border-radius: 0.375rem;
+        }
+        /* 为所有需要自动调整的输入框添加统一样式 */
+.auto-resize-input {
+    resize: none;
+    overflow: hidden;
+    line-height: 1.4;
+    min-height: 32px; /* 单行最小高度 */
+    font-family: inherit;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 6px 8px;
+    font-size: 12px;
+    width: 100%;
+}
         * {
             margin: 0;
             padding: 0;
@@ -13,7 +46,8 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', sans-serif;
-            background-color: #f5f5f5;
+            background-color: var(--light-gray);
+            color: var(--text-color);
             line-height: 1.5;
         }
         
@@ -28,13 +62,13 @@
             text-align: center;
             margin-bottom: 30px;
             padding: 20px;
-            border-bottom: 2px solid #e5e5e5;
+            border-bottom: 1px solid var(--border-color);
         }
         
         .header h1 {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--text-color);
             margin-bottom: 10px;
         }
         
@@ -64,41 +98,61 @@
         .btn {
             padding: 8px 16px;
             border: none;
-            border-radius: 4px;
+            border-radius: var(--border-radius);
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.3s;
+            font-weight: 500;
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
         }
         
-        .btn-primary { background: #1976d2; color: white; }
-        .btn-primary:hover { background: #1565c0; }
-        .btn-secondary { background: #616161; color: white; }
-        .btn-secondary:hover { background: #424242; }
-        .btn-danger { background: #d32f2f; color: white; }
-        .btn-danger:hover { background: #c62828; }
-        .btn-info { background: #0288d1; color: white; }
-        .btn-info:hover { background: #0277bd; }
-        .btn-warning { background: #f57c00; color: white; }
-        .btn-warning:hover { background: #ef6c00; }
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: var(--secondary-color); color: white; }
+        .btn-secondary:hover { background: var(--secondary-hover); }
+        .btn-danger { background: var(--danger-color); color: white; }
+        .btn-danger:hover { background: var(--danger-hover); }
+        .btn-info { background: var(--info-color); color: white; }
+        .btn-info:hover { background: var(--info-hover); }
+        .btn-warning { background: var(--warning-color); color: black; }
+        .btn-warning:hover { background: var(--warning-hover); }
         
         .form-group label {
-            font-weight: bold;
+            font-weight: 500;
             margin-bottom: 0;
-            color: #333;
+            color: var(--text-muted);
         }
         
+        input, textarea {
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+        input:focus, textarea:focus {
+            border-color: #86b7fe;
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+        }
+
         .form-group input {
             padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
             font-size: 14px;
         }
         
+        .shifts-container, .patients-section, .stats-panel {
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: white;
+            box-shadow: var(--box-shadow);
+        }
+
         .shifts-container {
             display: flex;
-            gap: 2px;
-            margin-bottom: 30px;
-            border: 2px solid #333;
+            gap: 0; /* Remove gap, use borders only */
         }
         
         .shift-column {
@@ -106,15 +160,17 @@
         }
 
         .shift-column + .shift-column {
-            border-left: 1px solid #333;
+            border-left: 1px solid var(--border-color);
         }
         
         .shift-header {
-            background: #e3f2fd;
-            padding: 10px;
+            background: var(--light-gray);
+            padding: 12px;
             text-align: center;
-            font-weight: bold;
-            border-bottom: 1px solid #333;
+            font-weight: 500;
+            font-size: 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--primary-color);
         }
         
         .shift-content {
@@ -123,13 +179,14 @@
         
         .shift-section {
             margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
         }
         
         .shift-section:last-child {
             border-bottom: none;
             margin-bottom: 0;
+            padding-bottom: 0;
         }
 
         .shift-grid-rooms {
@@ -159,119 +216,129 @@
         }
         
         .field-group label {
-            font-size: 11px;
-            color: #666;
-            margin-bottom: 2px;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
         }
         
         .field-group input {
-            padding: 4px;
-            border: 1px solid #ddd;
-            border-radius: 2px;
+            padding: 6px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
             font-size: 12px;
+            width: 100%; /* Ensure input takes full width of its container */
         }
         
         .special-care-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
         
         .special-care-item label {
-            font-size: 11px;
-            color: #666;
+            font-size: 12px;
+            color: var(--text-muted);
             flex-shrink: 0;
-            margin-right: 5px;
+            margin-right: 8px;
         }
         
         .special-care-item input {
             width: 100%;
-            padding: 2px 4px;
-            border: 1px solid #ddd;
-            border-radius: 2px;
+            padding: 6px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
             font-size: 12px;
             text-align: left;
         }
 
         .special-care-group {
-            border: 1px solid #eee;
+            border: 1px solid #f1f3f5;
             padding: 10px;
-            border-radius: 4px;
+            border-radius: var(--border-radius);
             margin-bottom: 10px;
+            background-color: #fcfdff;
         }
         .group-label {
-            font-weight: bold;
-            font-size: 12px;
+            font-weight: 500;
+            font-size: 13px;
             margin-bottom: 8px;
             display: block;
-            color: #333;
-        }
-        
-        .patients-section {
-            border: 2px solid #333;
-            margin-bottom: 30px;
+            color: var(--text-color);
         }
         
         .patients-header {
-            background: #f5f5f5;
+            background: var(--light-gray);
             padding: 15px;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
         .patients-header h3 {
-            font-weight: bold;
+            font-weight: 500;
             font-size: 16px;
+            color: var(--text-color);
         }
         
         .patients-table {
             width: 100%;
             border-collapse: collapse;
+            border: none; /* Remove outer table border, use container border */
         }
         
         .patients-table th,
         .patients-table td {
-            border: 1px solid #333;
-            padding: 8px;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 15px;
             text-align: left;
             vertical-align: top;
         }
-        
+
         .patients-table th {
-            background: #f8f9fa;
-            font-weight: bold;
+            background: var(--light-gray);
+            font-weight: 500;
             font-size: 14px;
+            color: var(--text-muted);
+            padding: 15px;
+        }
+
+        .patients-table tbody tr:nth-child(odd) {
+            background-color: #fcfcfd;
+        }
+
+        .patients-table tbody tr:hover {
+            background-color: #f1f3f5;
         }
         
         .patients-table input,
-        .patients-table textarea {
+        .patients-table textarea,
+        .patients-table select {
             width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 2px;
-            padding: 4px;
+            border: 1px solid #ced4da;
+            border-radius: var(--border-radius);
+            padding: 6px 8px;
             font-size: 12px;
         }
         
         .patients-table textarea {
-            resize: vertical;
-            min-height: 40px;
-        }
+    resize: none;
+    min-height: 40px;
+    overflow: hidden; /* 隐藏滚动条 */
+    line-height: 1.4;
+}
         
         .empty-patients {
             text-align: center;
             padding: 40px;
-            color: #666;
+            color: var(--text-muted);
             font-style: italic;
         }
         
         .stats-panel {
-            background: #f8f9fa;
-            border-radius: 8px;
             padding: 20px;
-            margin-bottom: 30px;
         }
         
         .stats-grid {
@@ -283,28 +350,29 @@
         .stat-card {
             background: white;
             padding: 15px;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
             text-align: center;
+            border: 1px solid var(--border-color);
         }
         
         .stat-label {
-            font-size: 12px;
-            color: #666;
+            font-size: 14px;
+            color: var(--text-muted);
             margin-bottom: 5px;
         }
         
         .stat-value {
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 28px;
+            font-weight: 500;
         }
         
-        .stat-value.blue { color: #1976d2; }
-        .stat-value.green { color: #388e3c; }
-        .stat-value.orange { color: #f57c00; }
-        .stat-value.purple { color: #7b1fa2; }
-        .stat-value.indigo { color: #303f9f; }
-        .stat-value.red { color: #d32f2f; }
+        .stat-value.blue { color: var(--primary-color); }
+        .stat-value.green { color: var(--success-color); }
+        .stat-value.orange { color: var(--warning-color); }
+        .stat-value.purple { color: #6f42c1; }
+        .stat-value.indigo { color: #3f51b5; }
+        .stat-value.red { color: var(--danger-color); }
         
         .hidden {
             display: none;
@@ -312,9 +380,8 @@
         
         @media print {
             .no-print { display: none !important; }
-            .container { padding: 10px; }
-            .shifts-container { font-size: 11px; }
-            .shift-content { padding: 8px; }
+            .container { padding: 10px; box-shadow: none; border: none; }
+            .shifts-container, .patients-section, .stats-panel { box-shadow: none; border: 1px solid #999; }
             body { background: white; }
             @page { margin: 1cm; size: A4 landscape; }
         }
@@ -325,7 +392,7 @@
             }
             .shift-column {
                 border-right: none;
-                border-bottom: 1px solid #333;
+                border-bottom: 1px solid var(--border-color);
             }
             .shift-column:last-child {
                 border-bottom: none;
@@ -336,6 +403,7 @@
             }
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -350,15 +418,16 @@
             </div>
             <div class="buttons">
                 <button class="btn btn-primary" onclick="toggleStats()">📊 统计</button>
-                <button class="btn btn-secondary" onclick="printData()">🖨️ 打印</button>
-                <button class="btn btn-info" onclick="saveData()">💾 保存本地</button>
-                <button class="btn btn-warning" onclick="loadData()">📂 加载本地</button>
-                <button class="btn btn-danger" onclick="clearData()">🗑️ 清空重置</button>
+                <button class="btn btn-secondary" onclick="saveAsPDF()">📄 存储为PDF</button>
+                <button class="btn btn-success" onclick="saveAsHTML()">💾 存储为HTML</button>
+                <button class="btn btn-info" onclick="saveData()">💾 暂存</button>
+                <button class="btn btn-warning" onclick="loadData()">📂 加载</button>
+                <button class="btn btn-danger" onclick="clearData()">🗑️ 重置</button>
             </div>
         </div>
         
         <div id="statsPanel" class="stats-panel no-print hidden">
-            <h3 style="margin-bottom: 15px;">今日统计</h3>
+            <h3 style="margin-bottom: 15px; font-weight: 500;">今日统计</h3>
             <div class="stats-grid">
                 <div class="stat-card"><div class="stat-label">总入院</div><div class="stat-value blue" id="statAdmissions">0</div></div>
                 <div class="stat-card"><div class="stat-label">总出院</div><div class="stat-value green" id="statDischarges">0</div></div>
@@ -380,7 +449,7 @@
                             <div class="field-group"><label>602:</label><input type="number" id="day_room_602" min="0"></div>
                             <div class="field-group"><label>603:</label><input type="number" id="day_room_603" min="0"></div>
                             <div class="field-group"><label>605:</label><input type="number" id="day_room_605" min="0"></div>
-                            <div class="field-group"><label>负压病房:</label><input type="number" id="day_room_neg_pressure" min="0"></div>
+                            <div class="field-group"><label>负压:</label><input type="number" id="day_room_neg_pressure" min="0"></div>
                             <div class="field-group"><label>606:</label><input type="number" id="day_room_606" min="0"></div>
                             <div class="field-group"><label>607:</label><input type="number" id="day_room_607" min="0"></div>
                         </div>
@@ -406,14 +475,14 @@
                     <div class="shift-section">
                         <div class="special-care-group">
                             <label class="group-label">上呼吸机患者:</label>
-                            <div class="special-care-item"><label>气管插管:</label><input type="text" id="day_ventilator_intubation"></div>
-                            <div class="special-care-item"><label>NIPPV:</label><input type="text" id="day_ventilator_nippv"></div>
-                            <div class="special-care-item"><label>CPAP:</label><input type="text" id="day_ventilator_cpap"></div>
+                            <div class="special-care-item"><label>气管插管:</label><textarea class="auto-resize-input"  id="day_ventilator_intubation"oninput="autoResize(this)"></textarea></div>
+                            <div class="special-care-item"><label>NIPPV:</label><textarea class="auto-resize-input" id="day_ventilator_nippv" oninput="autoResize(this)"></textarea> </div>
+                            <div class="special-care-item"><label>CPAP:</label><textarea class="auto-resize-input"  id="day_ventilator_cpap" oninput="autoResize(this)"></textarea></div>
                         </div>
                         
                         <div class="special-care-group">
                             <label class="group-label">中心静脉置管患者:</label>
-                            <div class="special-care-item"><label>PICC:</label><input type="text" id="day_centralVenous_picc"></div>
+                            <div class="special-care-item"><label>PICC:</label><textarea class="auto-resize-input" id="day_centralVenous_picc"oninput="autoResize(this)"></textarea></div>
                             <div class="special-care-item"><label>UVC:</label><input type="text" id="day_centralVenous_uvc"></div>
                             <div class="special-care-item"><label>CVC:</label><input type="text" id="day_centralVenous_cvc"></div>
                         </div>
@@ -431,10 +500,15 @@
                         <div class="special-care-item"><label>亚低温患者:</label><input type="text" id="day_hypothermia"></div>
                         <div class="special-care-item"><label>明天手术患者:</label><input type="text" id="day_tomorrowSurgery"></div>
                     </div>
+                    <div class="in_and_out">
+                            <label class="group-label">出入院:</label>
+                            <div class="special-care-item"><label>入院:</label><input type="text" id="day_drainage_urinary"></div>
+                    </div>
                     <div class="shift-section">
-                        <div class="field-group"><label>临床路径:</label><input type="text" id="day_clinicalPath"></div>
-                        <div class="field-group"><label>沟通平台:</label><input type="text" id="day_communication"></div>
-                        <div class="field-group"><label>日班交接签名:</label><input type="text" id="day_signature"></div>
+                        <div class="shift-grid" style="grid-template-columns: 1fr 1fr;">
+                        <div class="field-group"><label>A班交班护士:</label><input type="text" id="day_handover_nurse" ></div>
+                        <div class="field-group"><label>P班接班护士:</label><input type="text" id="day_takeover_nurse" ></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -475,13 +549,13 @@
                     <div class="shift-section">
                         <div class="special-care-group">
                             <label class="group-label">上呼吸机患者:</label>
-                            <div class="special-care-item"><label>气管插管:</label><input type="text" id="evening_ventilator_intubation"></div>
-                            <div class="special-care-item"><label>NIPPV:</label><input type="text" id="evening_ventilator_nippv"></div>
-                            <div class="special-care-item"><label>CPAP:</label><input type="text" id="evening_ventilator_cpap"></div>
+                            <div class="special-care-item"><label>气管插管:</label><textarea class="auto-resize-input"  id="evening_ventilator_intubation"oninput="autoResize(this)"></textarea></div>
+                            <div class="special-care-item"><label>NIPPV:</label><textarea class="auto-resize-input" id="evening_ventilator_nippv" oninput="autoResize(this)"></textarea> </div>
+                            <div class="special-care-item"><label>CPAP:</label><textarea class="auto-resize-input"  id="evening_ventilator_cpap" oninput="autoResize(this)"></textarea></div>
                         </div>
                         <div class="special-care-group">
                             <label class="group-label">中心静脉置管患者:</label>
-                            <div class="special-care-item"><label>PICC:</label><input type="text" id="evening_centralVenous_picc"></div>
+                            <div class="special-care-item"><label>PICC:</label><textarea class="auto-resize-input" id="evening_centralVenous_picc"oninput="autoResize(this)"></textarea></div>
                             <div class="special-care-item"><label>UVC:</label><input type="text" id="evening_centralVenous_uvc"></div>
                             <div class="special-care-item"><label>CVC:</label><input type="text" id="evening_centralVenous_cvc"></div>
                         </div>
@@ -500,9 +574,10 @@
                         <div class="special-care-item"><label>明天手术患者:</label><input type="text" id="evening_tomorrowSurgery"></div>
                     </div>
                     <div class="shift-section">
-                        <div class="field-group"><label>临床路径:</label><input type="text" id="evening_clinicalPath"></div>
-                        <div class="field-group"><label>沟通平台:</label><input type="text" id="evening_communication"></div>
-                        <div class="field-group"><label>晚班交接签名:</label><input type="text" id="evening_signature"></div>
+                     <div class="shift-grid" style="grid-template-columns: 1fr 1fr;">   
+         <div class="field-group"><label>P班交班护士:</label><input type="text" id="evening_handover_nurse"></div>
+         <div class="field-group"><label>N班接班护士:</label><input type="text" id="evening_takeover_nurse"></div>
+         </div> 
                     </div>
                 </div>
             </div>
@@ -543,13 +618,13 @@
                     <div class="shift-section">
                         <div class="special-care-group">
                             <label class="group-label">上呼吸机患者:</label>
-                            <div class="special-care-item"><label>气管插管:</label><input type="text" id="night_ventilator_intubation"></div>
-                            <div class="special-care-item"><label>NIPPV:</label><input type="text" id="night_ventilator_nippv"></div>
-                            <div class="special-care-item"><label>CPAP:</label><input type="text" id="night_ventilator_cpap"></div>
+                            <div class="special-care-item"><label>气管插管:</label><textarea class="auto-resize-input"  id="night_ventilator_intubation"oninput="autoResize(this)"></textarea></div>
+                            <div class="special-care-item"><label>NIPPV:</label><textarea class="auto-resize-input" id="night_ventilator_nippv" oninput="autoResize(this)"></textarea> </div>
+                            <div class="special-care-item"><label>CPAP:</label><textarea class="auto-resize-input"  id="night_ventilator_cpap" oninput="autoResize(this)"></textarea></div>
                         </div>
                         <div class="special-care-group">
                             <label class="group-label">中心静脉置管患者:</label>
-                            <div class="special-care-item"><label>PICC:</label><input type="text" id="night_centralVenous_picc"></div>
+                            <div class="special-care-item"><label>PICC:</label><textarea class="auto-resize-input" id="night_centralVenous_picc" oninput="autoResize(this)"></textarea></div>
                             <div class="special-care-item"><label>UVC:</label><input type="text" id="night_centralVenous_uvc"></div>
                             <div class="special-care-item"><label>CVC:</label><input type="text" id="night_centralVenous_cvc"></div>
                         </div>
@@ -568,9 +643,10 @@
                         <div class="special-care-item"><label>明天手术患者:</label><input type="text" id="night_tomorrowSurgery"></div>
                     </div>
                     <div class="shift-section">
-                        <div class="field-group"><label>临床路径:</label><input type="text" id="night_clinicalPath"></div>
-                        <div class="field-group"><label>沟通平台:</label><input type="text" id="night_communication"></div>
-                        <div class="field-group"><label>夜班交接签名:</label><input type="text" id="night_signature"></div>
+                        <div class="shift-grid" style="grid-template-columns: 1fr 1fr;">
+                        <div class="field-group"><label>N班交班护士:</label><input type="text" id="night_signature"></div>
+                        <div class="field-group"><label>A班交班护士:</label><input type="text" id="night_signature"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -579,17 +655,23 @@
         <div class="patients-section">
             <div class="patients-header">
                 <h3>病室动态 / 护理内容</h3>
-                <button class="btn btn-primary no-print" onclick="addPatient()">➕ 添加患者</button>
+                <div class="no-print" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <button class="btn btn-success" onclick="addPatient('皮损')">➕ 皮损</button>
+                <button class="btn btn-success" onclick="addPatient('静脉炎')">➕ 静脉炎</button>
+                <button class="btn btn-success" onclick="addPatient('压疮')">➕ 压疮</button>
+                <button class="btn btn-success" onclick="addPatient('臀红')">➕ 臀红</button>
+                <button class="btn btn-secondary" onclick="addPatient('其他')">➕ 其他</button>
+            </div>
             </div>
             <div id="patientsTable">
                 <table class="patients-table">
                     <thead>
                         <tr>
-                            <th style="width: 10%">类别标志</th>
+                            <th style="width: 15%">问题</th>
+                            <th style="width: 10%">房间</th>
                             <th style="width: 10%">床号</th>
-                            <th style="width: 15%">姓名</th>
-                            <th style="width: 25%">诊断</th>
-                            <th style="width: 30%">注意问题</th>
+                            <th style="width: 30%">诊断</th>
+                            <th style="width: 30%">处理</th>
                             <th style="width: 10%" class="no-print">操作</th>
                         </tr>
                     </thead>
@@ -606,13 +688,16 @@
         let patientCount = 0;
         let patients = [];
 
-        function addPatient() {
+        function addPatient(category = '') {
             patientCount++;
-            const patient = { id: patientCount, category: '', bedNumber: '', name: '', diagnosis: '', notes: '' };
+            const patient = { id: patientCount, category: category, bedNumber: '', name: '', diagnosis: '', notes: '' };
             patients.push(patient);
             renderPatients();
         }
-
+        function autoResize(textarea) {
+             textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
         function removePatient(id) {
             patients = patients.filter(p => p.id !== id);
             renderPatients();
@@ -633,12 +718,32 @@
             }
             tbody.innerHTML = patients.map(patient => `
                 <tr>
-                    <td><input type="text" value="${patient.category}" onchange="updatePatient(${patient.id}, 'category', this.value)"></td>
-                    <td><input type="text" value="${patient.bedNumber}" onchange="updatePatient(${patient.id}, 'bedNumber', this.value)"></td>
+                    <td>
+                        <select onchange="updatePatient(${patient.id}, 'category', this.value)">
+                            <option value="" ${!patient.category ? 'selected' : ''}>- 请选择 -</option>
+                            <option value="静脉炎" ${patient.category === '静脉炎' ? 'selected' : ''}>静脉炎</option>
+                            <option value="皮损" ${patient.category === '皮损' ? 'selected' : ''}>皮损</option>
+                            <option value="臀红" ${patient.category === '臀红' ? 'selected' : ''}>臀红</option>
+                            <option value="压疮" ${patient.category === '压疮' ? 'selected' : ''}>压疮</option>
+                            <option value="其他" ${patient.category === '其他' ? 'selected' : ''}>其他</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select onchange="updatePatient(${patient.id}, 'bedNumber', this.value)">
+                            <option value="" ${!patient.bedNumber ? 'selected' : ''}>- 请选择 -</option>
+                            <option value="601" ${patient.bedNumber === '601' ? 'selected' : ''}>601</option>
+                            <option value="602" ${patient.bedNumber === '602' ? 'selected' : ''}>602</option>
+                            <option value="603" ${patient.bedNumber === '603' ? 'selected' : ''}>603</option>
+                            <option value="605" ${patient.bedNumber === '605' ? 'selected' : ''}>605</option>
+                            <option value="负压" ${patient.bedNumber === '负压' ? 'selected' : ''}>负压</option>
+                            <option value="606" ${patient.bedNumber === '606' ? 'selected' : ''}>606</option>
+                            <option value="607" ${patient.bedNumber === '607' ? 'selected' : ''}>607</option>
+                        </select>
+                    </td>
                     <td><input type="text" value="${patient.name}" onchange="updatePatient(${patient.id}, 'name', this.value)"></td>
                     <td><input type="text" value="${patient.diagnosis}" onchange="updatePatient(${patient.id}, 'diagnosis', this.value)"></td>
-                    <td><textarea onchange="updatePatient(${patient.id}, 'notes', this.value)">${patient.notes}</textarea></td>
-                    <td class="no-print"><button class="btn btn-danger" onclick="removePatient(${patient.id})">🗑️ 删除</button></td>
+                    <td><textarea oninput="autoResize(this)" onchange="updatePatient(${patient.id}, 'notes', this.value)">${patient.notes}</textarea></td>
+                    <td class="no-print"><button class="btn btn-danger" onclick="removePatient(${patient.id})">🗑️</button></td>
                 </tr>
             `).join('');
         }
@@ -674,8 +779,68 @@
             }
         }
 
-        function printData() {
-            window.print();
+        function saveAsPDF() {
+            const element = document.querySelector('.container');
+            const dateString = document.getElementById('date').value || new Date().toISOString().split('T')[0];
+            const opt = {
+                margin:       [10, 5, 10, 5], // top, left, bottom, right in mm
+                filename:     `新生儿科病房护理交班志-${dateString}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            
+            // Temporarily hide elements with .no-print class
+            const noPrintElements = document.querySelectorAll('.no-print');
+            noPrintElements.forEach(el => el.style.display = 'none');
+            
+            html2pdf().from(element).set(opt).save().then(() => {
+                // Show the elements again after PDF is generated
+                noPrintElements.forEach(el => el.style.display = '');
+            }).catch(err => {
+                // Ensure elements are shown again even if there's an error
+                noPrintElements.forEach(el => el.style.display = '');
+                console.error('Could not generate PDF:', err);
+                alert('生成PDF失败，请查看控制台获取更多信息。');
+            });
+        }
+
+        function saveAsHTML() {
+            // Create a clone of the document to avoid modifying the live page
+            const clonedDocument = document.cloneNode(true);
+
+            // Update input values in the cloned document to ensure they are saved in the HTML
+            const originalInputs = document.querySelectorAll('input, textarea, select');
+            const clonedInputs = clonedDocument.querySelectorAll('input, textarea, select');
+
+            originalInputs.forEach((originalInput, index) => {
+                const clonedInput = clonedInputs[index];
+                if (originalInput.type === 'checkbox' || originalInput.type === 'radio') {
+                    if (originalInput.checked) {
+                        clonedInput.setAttribute('checked', 'checked');
+                    } else {
+                        clonedInput.removeAttribute('checked');
+                    }
+                } else if (originalInput.tagName.toLowerCase() === 'textarea') {
+                    clonedInput.innerHTML = originalInput.value;
+                } else { // text, number, date, etc.
+                    clonedInput.setAttribute('value', originalInput.value);
+                }
+            });
+
+            // Get the full HTML of the modified clone
+            const htmlString = clonedDocument.documentElement.outerHTML;
+
+            // Create a Blob and trigger download
+            const blob = new Blob([htmlString], { type: 'text/html' });
+            const a = document.createElement('a');
+            const dateString = document.getElementById('date').value || new Date().toISOString().split('T')[0];
+            a.download = `交班单-${dateString}.html`;
+            a.href = URL.createObjectURL(blob);
+            document.body.appendChild(a); // Required for Firefox
+            a.click();
+            document.body.removeChild(a); // Clean up
+            URL.revokeObjectURL(a.href);
         }
 
         function getFields() {
@@ -761,7 +926,11 @@
         window.addEventListener('load', function() {
             renderPatients();
             updateStats();
+            // 初始化所有 textarea 的高度
+    document.querySelectorAll('textarea').forEach(textarea => {
+        autoResize(textarea);
         });
+    });
     </script>
 </body>
 </html>
