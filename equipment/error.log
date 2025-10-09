@@ -1,0 +1,75 @@
+## 问题 1：超期未消毒按钮没有添加事件监听器
+
+你添加了按钮，但**没有在 JavaScript 中添加对应的事件监听代码**。
+
+在 `JS_SCRIPT` 部分，找到 `// 导出按钮` 之前，添加：
+
+```javascript
+// 超期未消毒设备按钮
+document.getElementById('overdueBtn').addEventListener('click', function() {
+    // 重置表单
+    document.getElementById('searchForm').reset();
+    
+    // 设置超期筛选条件
+    document.getElementById('overdue_disinfect').value = '7';
+    
+    // 重置页码并查询
+    currentPage = 1;
+    fetchData();
+});
+```
+
+## 问题 2：表格表头样式问题
+
+CSS 中表头颜色设置为白色，但背景也是半透明白色，导致看不清。
+
+在 `CSS_STYLES` 部分，找到 `.table th` 样式，修改为：
+
+```css
+.table th {
+    background-color: #4285f4;  /* 改为蓝色背景 */
+    font-weight: 600;
+    color: white;
+    padding: 12px 15px;
+    border: none;
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(10px);
+}
+```
+
+## 问题 3：表格行背景色问题
+
+白色背景下，表格半透明背景色看不清。修改：
+
+```css
+.table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;  /* 改为灰色边框 */
+    background-color: white;  /* 改为白色背景 */
+    transition: all 0.2s ease;
+}
+
+.table tr:hover td {
+    background-color: #f5f5f5;  /* 鼠标悬停改为浅灰色 */
+    transform: scale(1.01);
+}
+```
+
+## 问题 4：卡片背景问题
+
+白色背景下，卡片的玻璃效果不明显。修改：
+
+```css
+.card {
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin-bottom: 25px;
+    border: 1px solid #e0e0e0;  /* 改为灰色边框 */
+    transition: all 0.3s ease;
+    overflow: hidden;
+    background: white;  /* 改为纯白色背景 */
+}
+```
+
+这些是主要需要修改的地方。修改后，按钮功能就能正常工作了。

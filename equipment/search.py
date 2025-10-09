@@ -33,19 +33,11 @@ CSS_STYLES = '''<style>
     
     body {
         font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-        background-size: 400% 400%;
-        animation: gradient 15s ease infinite;
+        background: #ffffff;
         color: var(--dark-gray);
         min-height: 100vh;
         margin: 0;
         padding: 20px;
-    }
-
-    @keyframes gradient {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
     }
     
     .container {
@@ -57,18 +49,13 @@ CSS_STYLES = '''<style>
         border-radius: 12px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         margin-bottom: 25px;
-        border: 1px solid var(--glass-bg);
+        border: 1px solid #e0e0e0;  /* 改为灰色边框 */
         transition: all 0.3s ease;
         overflow: hidden;
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        background: var(--glass-bg);
+        background: white;  /* 改为纯白色背景 */
     }
     
-    .card:hover {
-        transform: translateY(-5px) scale(1.01);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-    }
+
     
     .card-header {
         background-color: white;
@@ -94,13 +81,10 @@ CSS_STYLES = '''<style>
     .btn-primary:hover {
         background-color: #3367d6;
         border-color: #3367d6;
-        transform: translateY(-1px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
-    .btn-primary:active {
-        transform: translateY(0);
-    }
+    
     
     .btn-outline-primary {
         color: var(--primary-color);
@@ -113,13 +97,10 @@ CSS_STYLES = '''<style>
     .btn-outline-primary:hover {
         background-color: var(--primary-color);
         color: white;
-        transform: translateY(-1px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
-    .btn-outline-primary:active {
-        transform: translateY(0);
-    }
+    
     
     .form-control:focus, .form-select:focus {
         border-color: var(--primary-color);
@@ -133,7 +114,7 @@ CSS_STYLES = '''<style>
     }
     
     .table th {
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: #4285f4;  /* 改为蓝色背景 */
         font-weight: 600;
         color: white;
         padding: 12px 15px;
@@ -145,14 +126,14 @@ CSS_STYLES = '''<style>
     
     .table td {
         padding: 12px 15px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        background-color: rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid #ddd;  /* 改为灰色边框 */
+        background-color: white;  /* 改为白色背景 */
         transition: all 0.2s ease;
     }
     
     .table tr:hover td {
-        background-color: rgba(255, 255, 255, 0.3);
-        transform: scale(1.01);
+        background-color: #f5f5f5;  /* 鼠标悬停改为浅灰色 */
+        
     }
     
     .pagination .page-item.active .page-link {
@@ -269,6 +250,9 @@ HTML_BODY = '''<body>
                 <a href="/" class="btn btn-outline-primary me-2">
                     <i class="bi bi-plus-circle"></i> 新增记录
                 </a>
+                <button id="overdueBtn" class="btn btn-outline-warning me-2">
+                    <i class="bi bi-exclamation-triangle"></i> 超期未消毒设备
+                </button>
                 <button id="exportBtn" class="btn btn-outline-success">
                     <i class="bi bi-file-earmark-excel"></i> 导出结果
                 </button>
@@ -358,6 +342,11 @@ HTML_BODY = '''<body>
                         <label for="bed" class="form-label">床号</label>
                         <input type="text" id="bed" name="bed" class="form-control" placeholder="输入床号">
                     </div>
+
+                    <div class="col-md-4">
+                        <label for="location" class="form-label">放置位置</label>
+                        <input type="text" id="location" name="location" class="form-control" placeholder="输入放置位置">
+                    </div>
                     
                     <div class="col-md-4">
                         <label for="person_name" class="form-label">患儿姓名</label>
@@ -377,6 +366,14 @@ HTML_BODY = '''<body>
                     <div class="col-md-4">
                         <label for="notes" class="form-label">备注</label>
                         <input type="text" id="notes" name="notes" class="form-control" placeholder="输入备注关键词">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="overdue_disinfect" class="form-label">终末消毒超期</label>
+                        <select id="overdue_disinfect" name="overdue_disinfect" class="form-select">
+                            <option value="">全部</option>
+                            <option value="7">≥7天未消毒</option>
+                        </select>
                     </div>
                     
                     <div class="col-12 mt-4">
@@ -419,6 +416,7 @@ HTML_BODY = '''<body>
                                 <th data-field="运行状态">运行状态 <i class="bi bi-arrow-down-up sort-icon"></i></th>
                                 <th data-field="使用人">使用人 <i class="bi bi-arrow-down-up sort-icon"></i></th>
                                 <th data-field="床号">床号 <i class="bi bi-arrow-down-up sort-icon"></i></th>
+                                <th data-field="放置位置">放置位置 <i class="bi bi-arrow-down-up sort-icon"></i></th>
                                 <th data-field="患儿姓名">患儿姓名 <i class="bi bi-arrow-down-up sort-icon"></i></th>
                                 <th data-field="住院号">住院号 <i class="bi bi-arrow-down-up sort-icon"></i></th>
                                 <th data-field="结束日期">结束日期 <i class="bi bi-arrow-down-up sort-icon"></i></th>
@@ -543,10 +541,12 @@ JS_SCRIPT = '''<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js
                     'status': '运行状态',
                     'user': '使用人',
                     'bed': '床号',
+                    'location': '放置位置',
                     'person_name': '患儿姓名',
                     'patient_id': '住院号',
                     'disinfector': '消毒人',
-                    'notes': '备注'
+                    'notes': '备注',
+                    'overdue_disinfect': '终末消毒超期' 
                 };
                 
                 for (const [key, value] of formData.entries()) {
@@ -641,6 +641,7 @@ JS_SCRIPT = '''<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js
                             </td>
                             <td>${item['使用人'] || ''}</td>
                             <td>${item['床号'] || ''}</td>
+                            <td>${item['放置位置'] || ''}</td>
                             <td>${item['患儿姓名'] || ''}</td>
                             <td>${item['住院号'] || ''}</td>
                             <td>${item['结束日期'] || ''}</td>
@@ -738,6 +739,19 @@ JS_SCRIPT = '''<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js
                 renderTable();
             });
             
+            // 超期未消毒设备按钮
+            document.getElementById('overdueBtn').addEventListener('click', function() {
+                // 重置表单
+                document.getElementById('searchForm').reset();
+                
+                // 设置超期筛选条件
+                document.getElementById('overdue_disinfect').value = '7';
+                
+                // 重置页码并查询
+                currentPage = 1;
+                fetchData();
+            });
+
             // 导出按钮
             document.getElementById('exportBtn').addEventListener('click', function() {
                 if (allData.length === 0) {
@@ -801,6 +815,127 @@ JS_SCRIPT = '''<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js
 </body>
 </html>
 '''
+
+
+
+@search_bp.route('/search')
+def search_page():
+    """显示搜索页面"""
+    return render_template_string(SEARCH_HTML)
+
+@search_bp.route('/api/search')
+def api_search():
+    """API: 查询数据"""
+    CSV_FILE = 'data.csv'
+    
+    # 读取所有数据
+    if not os.path.isfile(CSV_FILE):
+        return jsonify([])
+    
+    with open(CSV_FILE, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        data = list(reader)
+    
+    # 获取查询参数并过滤
+    filters = {
+        'name': request.args.get('name', ''),
+        'number': request.args.get('number', ''),
+        'status': request.args.get('status', ''),
+        'user': request.args.get('user', ''),
+        'bed': request.args.get('bed', ''),
+        'location': request.args.get('location', ''),
+        'person_name': request.args.get('person_name', ''),
+        'patient_id': request.args.get('patient_id', ''),
+        'disinfector': request.args.get('disinfector', ''),
+        'notes': request.args.get('notes', '')
+    }
+    
+    # 应用过滤条件
+    filtered_data = data
+    for key, value in filters.items():
+        if value:
+            field_map = {
+                'name': '设备名称',
+                'number': '设备编号',
+                'status': '运行状态',
+                'user': '使用人',
+                'bed': '床号',
+                'location': '放置位置',
+                'person_name': '患儿姓名',
+                'patient_id': '住院号',
+                'disinfector': '消毒人',
+                'notes': '备注'
+            }
+            field = field_map.get(key)
+            if field:
+                filtered_data = [row for row in filtered_data 
+                               if value == row.get(field, '')]
+    #添加终末消毒超期筛选            
+    overdue_days = request.args.get('overdue_disinfect', '')
+    if overdue_days:
+        from datetime import datetime, timedelta
+        today = datetime.now()
+        threshold_days = int(overdue_days)
+        
+        def is_overdue(row):
+            disinfect_date_str = row.get('终末消毒日期', '')
+            if not disinfect_date_str:
+                return False  # 没有消毒日期的不算
+            
+            try:
+                disinfect_date = datetime.strptime(disinfect_date_str, '%Y-%m-%d')
+                days_diff = (today - disinfect_date).days
+                return days_diff >= threshold_days
+            except:
+                return False
+        
+        filtered_data = [row for row in filtered_data if is_overdue(row)]
+    
+    return jsonify(filtered_data)
+
+@search_bp.route('/api/export', methods=['POST'])
+def api_export():
+    """API: 导出数据为 Excel"""
+    try:
+        import openpyxl
+        from openpyxl.styles import Font, Alignment, PatternFill
+    except ImportError:
+        return jsonify({'error': '缺少 openpyxl 库，请安装: pip install openpyxl'}), 500
+    
+    data = request.json.get('data', [])
+    
+    if not data:
+        return jsonify({'error': '没有数据可导出'}), 400
+    
+    # 创建工作簿
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "设备数据"
+    
+    # 写入表头
+    headers = list(data[0].keys()) if data else []
+    for col, header in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col, value=header)
+        cell.font = Font(bold=True)
+        cell.fill = PatternFill(start_color="4285f4", end_color="4285f4", fill_type="solid")
+        cell.alignment = Alignment(horizontal="center")
+    
+    # 写入数据
+    for row_idx, item in enumerate(data, 2):
+        for col_idx, header in enumerate(headers, 1):
+            ws.cell(row=row_idx, column=col_idx, value=item.get(header, ''))
+    
+    # 保存到内存
+    output = io.BytesIO()
+    wb.save(output)
+    output.seek(0)
+    
+    return send_file(
+        output,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        as_attachment=True,
+        download_name=f'设备数据_{datetime.now().strftime("%Y%m%d")}.xlsx'
+    )
 
 # 组合完整HTML模板
 SEARCH_HTML = HTML_HEAD + CSS_STYLES + HTML_BODY + JS_SCRIPT

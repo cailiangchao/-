@@ -6,7 +6,8 @@ from werkzeug.utils import secure_filename
 from search import search_bp
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here'  # Needed for flash messages
+app.secret_key = 'your-secret-key-here'
+
 
 # 注册蓝图
 app.register_blueprint(search_bp)
@@ -185,6 +186,9 @@ FORM_HTML = """
                         <option value="SLE呼吸机">SLE呼吸机</option>
                         <option value="千禧呼吸机">千禧呼吸机</option>
                         <option value="E360呼吸机">E360呼吸机</option>
+                        <option value="脑电图">脑电图</option>
+                        <option value="亚低温机">亚低温机</option>
+                        <option value="NO机">NO机</option>
                     </select>
                 </div>
                 
@@ -253,6 +257,11 @@ FORM_HTML = """
             <div class="form-group">
                 <label for="disinfector">消毒人</label>
                 <input type="text" id="disinfector" name="disinfector">
+            </div>
+
+            <div class="form-group">
+                <label for="location">放置位置</label>
+                <input type="text" id="location" name="loction" placeholder="如：601-01">
             </div>
             
             <div class="form-group">
@@ -354,7 +363,7 @@ def ensure_data_file():
             writer.writerow([
                 '设备名称', '设备编号', '使用日期', '运行状态', '使用人', 
                 '床号', '患儿姓名', '住院号', '结束日期', '终末消毒日期', 
-                '消毒人', '备注', '记录时间'
+                '消毒人','放置位置', '备注', '记录时间'
             ])
 
 def read_equipment_data():
@@ -376,6 +385,7 @@ def save_data(data):
             data.get('status', ''),
             data.get('user', ''),
             data.get('bed', ''),
+            data.get('location', ''),
             data.get('person_name', ''),
             f"P000{data.get('patient_id', '')}",
             data.get('end_date', ''),
@@ -397,6 +407,7 @@ def index():
             'status': request.form.get('status', ''),
             'user': request.form.get('user', ''),
             'bed': request.form.get('bed', ''),
+            'location': request.form.get('location', ''),
             'person_name': request.form.get('person_name', ''),
             'patient_id': request.form.get('patient_id', ''),
             'end_date': request.form.get('end_date', ''),
@@ -427,12 +438,13 @@ def view_data():
         name = request.args.get('name', '').strip()
         number = request.args.get('number', '').strip()
         
-        if not name or not number:
-            flash('请提供设备名称和编号!', 'error')
-            return redirect('/')
+    
             
         # 仅显示与本次填写的设备名称和编号相同的数据
-        filtered = [row for row in data if (row.get('设备名称', '') == name and row.get('设备编号', '') == number)]
+        if name and number:
+            filtered = [row for row in data if (row.get('设备名称', '') == name and row.get('设备编号', '') == number)]
+        else:
+            filtered = data
         if not filtered:
             return render_template_string(DATA_VIEW_HTML, table_html="<p>暂无数据</p>")
             
